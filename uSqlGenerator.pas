@@ -83,8 +83,6 @@ var
   StackLevel:integer;
   i1:integer;
 
-
-
   function ExpandString(Value:string):string;forward;
 
   function ExpandMacro(Macro:THsTextData; Value:string;AStack:integer):string;
@@ -143,6 +141,17 @@ var
       QL:integer;
       QM:char;
       c:char;
+
+      function ProcessParam(rawParam: string): string;
+      begin
+        Result := Trim(rawParam);
+        if Copy(Result, 1, 2) = '=(' then
+        begin
+          Result := Trim(Copy(Result, 3, Length(Result) - 3));
+        end;
+  
+      end;
+
     begin
       i := 1;
 
@@ -157,7 +166,7 @@ var
           begin
             if (QL = 0) and (NL = 0) then
             begin
-              CSV.Add(Param);
+              CSV.Add(ProcessParam(Param));
               Param := '';
             end else
             Param := Param + c;
@@ -207,7 +216,7 @@ var
         end;
         Inc(i);
       end;
-      if Trim(Param) <> '' then CSV.Add(Param);
+      if Trim(Param) <> '' then CSV.Add(ProcessParam(Param));
     end;
 
   var
