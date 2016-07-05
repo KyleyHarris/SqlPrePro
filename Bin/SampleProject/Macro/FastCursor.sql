@@ -1,0 +1,3 @@
+FastCursor
+MACRO FastCursor @Name
+DECLARE @Name CURSOR LOCAL FAST_FORWARD for 

@@ -1,0 +1,7 @@
+_IF
+MACRO _IF @EVAL, @TRUE, @FALSE
+CASE WHEN 
+  @EVAL then
+  @TRUE ELSE
+  @FALSE
+END

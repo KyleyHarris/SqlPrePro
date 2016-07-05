@@ -1,0 +1,11 @@
+[Account]
+Id=
+Name=
+Email=
+Password=
+[Series]
+Id=
+Name=
+[CollationProject]
+Id=
+Name=
