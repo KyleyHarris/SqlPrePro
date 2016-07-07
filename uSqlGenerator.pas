@@ -81,7 +81,6 @@ function TSqlGenerator.CompileSql(AString: string): string;
 var
   GlobalStack: TStringList;
   StackLevel:integer;
-  i1:integer;
 
   function ExpandString(Value:string):string;forward;
 
@@ -154,7 +153,7 @@ var
 
     begin
       i := 1;
-
+      QM := '"';
       NL := 0;
       QL := 0;
       Param := '';
@@ -397,7 +396,6 @@ var
       iPos:integer;
       data :string;
       iMDP,iMDE:integer;
-      NestBracket:integer;
       Macro:THsTextData;
       Kind:TtkTokenKind;
 
@@ -525,8 +523,6 @@ var
     Dec(StackLevel);
 
   end;
-var
-  i:integer;
 
 begin
   GlobalStack := TStringList.Create;

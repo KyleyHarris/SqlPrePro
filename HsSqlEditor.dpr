@@ -9,7 +9,8 @@ uses
   uSqlProject in 'uSqlProject.pas',
   uTemplate in 'Hss\uTemplate.pas',
   uHssStringList in 'Hss\uHssStringList.pas',
-  uHssStringsCSV in 'Hss\uHssStringsCSV.pas';
+  uHssStringsCSV in 'Hss\uHssStringsCSV.pas',
+  uSqlEditor in 'uSqlEditor.pas';
 
 {$R *.res}
 

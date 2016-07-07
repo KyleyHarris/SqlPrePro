@@ -92,7 +92,7 @@ type
 
 function HssStringReplace(const s:string; AFind, AReplace: string): string;
 var
-  i,i1,i2:integer;
+  i:integer;
   ASourceLen,AFindLen,AReplaceLen:integer;
   LenDif:integer;
   AMatchPos:integer;
@@ -201,7 +201,6 @@ var
   s:string;
   i1:integer;
   i2:integer;
-  m:string;
 
   function GetChar(APos:integer):Char;
   begin

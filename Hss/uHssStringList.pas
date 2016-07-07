@@ -129,7 +129,7 @@ var
 begin
   sl := TStringList.Create;
   sl.Text := astrings;
-  InsertStringsAtMarker(sl, Marker, DeleteMarker);
+  Result := InsertStringsAtMarker(sl, Marker, DeleteMarker);
   sl.Free;
 end;
 

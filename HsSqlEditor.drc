@@ -8,148 +8,147 @@
   resources were bound to the produced executable.
 */
 
-#define SynEditStrConst_SYNS_LangSQL 65264
-#define SynEditTextBuffer_SListIndexOutOfBounds 65265
-#define SynEditTextBuffer_SInvalidCapacity 65266
-#define ComStrs_sTabFailClear 65267
-#define ComStrs_sTabFailDelete 65268
-#define ComStrs_sTabFailRetrieve 65269
-#define ComStrs_sTabFailGetObject 65270
-#define ComStrs_sTabFailSet 65271
-#define ComStrs_sTabFailSetObject 65272
-#define ComStrs_sTabMustBeMultiLine 65273
-#define ComStrs_sInvalidIndex 65274
-#define ComStrs_sInsertError 65275
-#define ComStrs_sPageIndexError 65276
-#define SqlEditorMain_SNoSelectionAvailable 65277
-#define SynEditStrConst_SYNS_AttrException 65280
-#define SynEditStrConst_SYNS_AttrFunction 65281
-#define SynEditStrConst_SYNS_AttrIdentifier 65282
-#define SynEditStrConst_SYNS_AttrNumber 65283
-#define SynEditStrConst_SYNS_AttrPLSQL 65284
-#define SynEditStrConst_SYNS_AttrReservedWord 65285
-#define SynEditStrConst_SYNS_AttrSpace 65286
-#define SynEditStrConst_SYNS_AttrSQLPlus 65287
-#define SynEditStrConst_SYNS_AttrString 65288
-#define SynEditStrConst_SYNS_AttrSymbol 65289
-#define SynEditStrConst_SYNS_AttrTableName 65290
-#define SynEditStrConst_SYNS_AttrVariable 65291
-#define SynEditStrConst_SYNS_ScrollInfoFmt 65292
-#define SynEditStrConst_SYNS_ScrollInfoFmtTop 65293
-#define SynEditStrConst_SYNS_EDuplicateShortcut 65294
-#define SynEditStrConst_SYNS_FilterSQL 65295
-#define Consts_SDockZoneVersionConflict 65296
-#define Consts_SMultiSelectRequired 65297
-#define Consts_SErrorSettingCount 65298
-#define Consts_SListBoxMustBeVirtual 65299
-#define Consts_SANSIEncoding 65300
-#define Consts_SASCIIEncoding 65301
-#define Consts_SUnicodeEncoding 65302
-#define Consts_SBigEndianEncoding 65303
-#define Consts_SUTF8Encoding 65304
-#define Consts_SUTF7Encoding 65305
-#define Consts_SPageControlNotSet 65306
-#define SynEditStrConst_SYNS_AttrComment 65307
-#define SynEditStrConst_SYNS_AttrConditionalComment 65308
-#define SynEditStrConst_SYNS_AttrDataType 65309
-#define SynEditStrConst_SYNS_AttrDefaultPackage 65310
-#define SynEditStrConst_SYNS_AttrDelimitedIdentifier 65311
-#define Consts_SmkcDown 65312
-#define Consts_SmkcIns 65313
-#define Consts_SmkcDel 65314
-#define Consts_SmkcShift 65315
-#define Consts_SmkcCtrl 65316
-#define Consts_SmkcAlt 65317
-#define Consts_SInsertLineError 65318
-#define Consts_SInvalidClipFmt 65319
-#define Consts_SIconToClipboard 65320
-#define Consts_SCannotOpenClipboard 65321
-#define Consts_SInvalidMemoSize 65322
-#define Consts_SDuplicateMenus 65323
-#define Consts_SDockedCtlNeedsName 65324
-#define Consts_SDockTreeRemoveError 65325
-#define Consts_SDockZoneNotFound 65326
-#define Consts_SDockZoneHasNoCtl 65327
-#define Consts_SMsgDlgIgnore 65328
-#define Consts_SMsgDlgAll 65329
-#define Consts_SMsgDlgNoToAll 65330
-#define Consts_SMsgDlgYesToAll 65331
-#define Consts_SmkcBkSp 65332
-#define Consts_SmkcTab 65333
-#define Consts_SmkcEsc 65334
-#define Consts_SmkcEnter 65335
-#define Consts_SmkcSpace 65336
-#define Consts_SmkcPgUp 65337
-#define Consts_SmkcPgDn 65338
-#define Consts_SmkcEnd 65339
-#define Consts_SmkcHome 65340
-#define Consts_SmkcLeft 65341
-#define Consts_SmkcUp 65342
-#define Consts_SmkcRight 65343
-#define Consts_SCannotDragForm 65344
-#define Consts_SVMetafiles 65345
-#define Consts_SVEnhMetafiles 65346
-#define Consts_SVIcons 65347
-#define Consts_SVBitmaps 65348
-#define Consts_SMsgDlgWarning 65349
-#define Consts_SMsgDlgError 65350
-#define Consts_SMsgDlgInformation 65351
-#define Consts_SMsgDlgConfirm 65352
-#define Consts_SMsgDlgYes 65353
-#define Consts_SMsgDlgNo 65354
-#define Consts_SMsgDlgOK 65355
-#define Consts_SMsgDlgCancel 65356
-#define Consts_SMsgDlgHelp 65357
-#define Consts_SMsgDlgAbort 65358
-#define Consts_SMsgDlgRetry 65359
-#define Consts_SMenuReinserted 65360
-#define Consts_SMenuNotFound 65361
-#define Consts_SNoTimers 65362
-#define Consts_SGroupIndexTooLow 65363
-#define Consts_SNoMDIForm 65364
-#define Consts_SControlParentSetToSelf 65365
-#define Consts_SOKButton 65366
-#define Consts_SCancelButton 65367
-#define Consts_SYesButton 65368
-#define Consts_SNoButton 65369
-#define Consts_SHelpButton 65370
-#define Consts_SCloseButton 65371
-#define Consts_SIgnoreButton 65372
-#define Consts_SRetryButton 65373
-#define Consts_SAbortButton 65374
-#define Consts_SAllButton 65375
-#define Consts_SNoCanvasHandle 65376
-#define Consts_SInvalidImageSize 65377
-#define Consts_SInvalidImageList 65378
-#define Consts_SImageIndexError 65379
-#define Consts_SImageReadFail 65380
-#define Consts_SImageWriteFail 65381
-#define Consts_SWindowDCError 65382
-#define Consts_SWindowClass 65383
-#define Consts_SCannotFocus 65384
-#define Consts_SParentRequired 65385
-#define Consts_SParentGivenNotAParent 65386
-#define Consts_SMDIChildNotVisible 65387
-#define Consts_SVisibleChanged 65388
-#define Consts_SCannotShowModal 65389
-#define Consts_SPropertyOutOfRange 65390
-#define Consts_SMenuIndexError 65391
+#define SynEditTextBuffer_SListIndexOutOfBounds 65264
+#define SynEditTextBuffer_SInvalidCapacity 65265
+#define ComStrs_sTabFailClear 65266
+#define ComStrs_sTabFailDelete 65267
+#define ComStrs_sTabFailRetrieve 65268
+#define ComStrs_sTabFailGetObject 65269
+#define ComStrs_sTabFailSet 65270
+#define ComStrs_sTabFailSetObject 65271
+#define ComStrs_sTabMustBeMultiLine 65272
+#define ComStrs_sInvalidIndex 65273
+#define ComStrs_sInsertError 65274
+#define ComStrs_sPageIndexError 65275
+#define uSqlEditor_SNoSelectionAvailable 65276
+#define SynEditStrConst_SYNS_AttrFunction 65280
+#define SynEditStrConst_SYNS_AttrIdentifier 65281
+#define SynEditStrConst_SYNS_AttrNumber 65282
+#define SynEditStrConst_SYNS_AttrPLSQL 65283
+#define SynEditStrConst_SYNS_AttrReservedWord 65284
+#define SynEditStrConst_SYNS_AttrSpace 65285
+#define SynEditStrConst_SYNS_AttrSQLPlus 65286
+#define SynEditStrConst_SYNS_AttrString 65287
+#define SynEditStrConst_SYNS_AttrSymbol 65288
+#define SynEditStrConst_SYNS_AttrTableName 65289
+#define SynEditStrConst_SYNS_AttrVariable 65290
+#define SynEditStrConst_SYNS_ScrollInfoFmt 65291
+#define SynEditStrConst_SYNS_ScrollInfoFmtTop 65292
+#define SynEditStrConst_SYNS_EDuplicateShortcut 65293
+#define SynEditStrConst_SYNS_FilterSQL 65294
+#define SynEditStrConst_SYNS_LangSQL 65295
+#define Consts_SUnicodeEncoding 65296
+#define Consts_SBigEndianEncoding 65297
+#define Consts_SUTF8Encoding 65298
+#define Consts_SUTF7Encoding 65299
+#define Consts_SPageControlNotSet 65300
+#define HelpIntfs_hNoTableOfContents 65301
+#define HelpIntfs_hNothingFound 65302
+#define HelpIntfs_hNoContext 65303
+#define HelpIntfs_hNoContextFound 65304
+#define HelpIntfs_hNoTopics 65305
+#define SynEditStrConst_SYNS_AttrComment 65306
+#define SynEditStrConst_SYNS_AttrConditionalComment 65307
+#define SynEditStrConst_SYNS_AttrDataType 65308
+#define SynEditStrConst_SYNS_AttrDefaultPackage 65309
+#define SynEditStrConst_SYNS_AttrDelimitedIdentifier 65310
+#define SynEditStrConst_SYNS_AttrException 65311
+#define Consts_SmkcCtrl 65312
+#define Consts_SmkcAlt 65313
+#define Consts_SInsertLineError 65314
+#define Consts_SInvalidClipFmt 65315
+#define Consts_SIconToClipboard 65316
+#define Consts_SCannotOpenClipboard 65317
+#define Consts_SInvalidMemoSize 65318
+#define Consts_SDuplicateMenus 65319
+#define Consts_SDockedCtlNeedsName 65320
+#define Consts_SDockTreeRemoveError 65321
+#define Consts_SDockZoneNotFound 65322
+#define Consts_SDockZoneHasNoCtl 65323
+#define Consts_SDockZoneVersionConflict 65324
+#define Consts_SMultiSelectRequired 65325
+#define Consts_SANSIEncoding 65326
+#define Consts_SASCIIEncoding 65327
+#define Consts_SmkcBkSp 65328
+#define Consts_SmkcTab 65329
+#define Consts_SmkcEsc 65330
+#define Consts_SmkcEnter 65331
+#define Consts_SmkcSpace 65332
+#define Consts_SmkcPgUp 65333
+#define Consts_SmkcPgDn 65334
+#define Consts_SmkcEnd 65335
+#define Consts_SmkcHome 65336
+#define Consts_SmkcLeft 65337
+#define Consts_SmkcUp 65338
+#define Consts_SmkcRight 65339
+#define Consts_SmkcDown 65340
+#define Consts_SmkcIns 65341
+#define Consts_SmkcDel 65342
+#define Consts_SmkcShift 65343
+#define Consts_SVBitmaps 65344
+#define Consts_SMsgDlgWarning 65345
+#define Consts_SMsgDlgError 65346
+#define Consts_SMsgDlgInformation 65347
+#define Consts_SMsgDlgConfirm 65348
+#define Consts_SMsgDlgYes 65349
+#define Consts_SMsgDlgNo 65350
+#define Consts_SMsgDlgOK 65351
+#define Consts_SMsgDlgCancel 65352
+#define Consts_SMsgDlgHelp 65353
+#define Consts_SMsgDlgAbort 65354
+#define Consts_SMsgDlgRetry 65355
+#define Consts_SMsgDlgIgnore 65356
+#define Consts_SMsgDlgAll 65357
+#define Consts_SMsgDlgNoToAll 65358
+#define Consts_SMsgDlgYesToAll 65359
+#define Consts_SNoMDIForm 65360
+#define Consts_SControlParentSetToSelf 65361
+#define Consts_SOKButton 65362
+#define Consts_SCancelButton 65363
+#define Consts_SYesButton 65364
+#define Consts_SNoButton 65365
+#define Consts_SHelpButton 65366
+#define Consts_SCloseButton 65367
+#define Consts_SIgnoreButton 65368
+#define Consts_SRetryButton 65369
+#define Consts_SAbortButton 65370
+#define Consts_SAllButton 65371
+#define Consts_SCannotDragForm 65372
+#define Consts_SVMetafiles 65373
+#define Consts_SVEnhMetafiles 65374
+#define Consts_SVIcons 65375
+#define Consts_SImageWriteFail 65376
+#define Consts_SWindowDCError 65377
+#define Consts_SWindowClass 65378
+#define Consts_SCannotFocus 65379
+#define Consts_SParentRequired 65380
+#define Consts_SParentGivenNotAParent 65381
+#define Consts_SMDIChildNotVisible 65382
+#define Consts_SVisibleChanged 65383
+#define Consts_SCannotShowModal 65384
+#define Consts_SScrollBarRange 65385
+#define Consts_SPropertyOutOfRange 65386
+#define Consts_SMenuIndexError 65387
+#define Consts_SMenuReinserted 65388
+#define Consts_SMenuNotFound 65389
+#define Consts_SNoTimers 65390
+#define Consts_SGroupIndexTooLow 65391
 #define RTLConsts_SUnknownGroup 65392
 #define RTLConsts_SUnknownProperty 65393
 #define RTLConsts_SWriteError 65394
-#define HelpIntfs_hNoTableOfContents 65395
-#define HelpIntfs_hNothingFound 65396
-#define HelpIntfs_hNoContext 65397
-#define HelpIntfs_hNoContextFound 65398
-#define HelpIntfs_hNoTopics 65399
-#define Consts_SInvalidTabPosition 65400
-#define Consts_SInvalidTabStyle 65401
-#define Consts_SInvalidBitmap 65402
-#define Consts_SInvalidIcon 65403
-#define Consts_SInvalidMetafile 65404
-#define Consts_SChangeIconSize 65405
-#define Consts_SUnknownClipboardFormat 65406
-#define Consts_SOutOfResources 65407
+#define Consts_SInvalidTabPosition 65395
+#define Consts_SInvalidTabStyle 65396
+#define Consts_SInvalidBitmap 65397
+#define Consts_SInvalidIcon 65398
+#define Consts_SInvalidMetafile 65399
+#define Consts_SChangeIconSize 65400
+#define Consts_SUnknownClipboardFormat 65401
+#define Consts_SOutOfResources 65402
+#define Consts_SNoCanvasHandle 65403
+#define Consts_SInvalidImageSize 65404
+#define Consts_SInvalidImageList 65405
+#define Consts_SImageIndexError 65406
+#define Consts_SImageReadFail 65407
 #define RTLConsts_SInvalidProperty 65408
 #define RTLConsts_SInvalidPropertyPath 65409
 #define RTLConsts_SInvalidPropertyValue 65410
@@ -280,7 +279,6 @@
 #define SysConst_SRangeError 65535
 STRINGTABLE
 BEGIN
-	SynEditStrConst_SYNS_LangSQL,	"SQL"
 	SynEditTextBuffer_SListIndexOutOfBounds,	"Invalid stringlist index %d"
 	SynEditTextBuffer_SInvalidCapacity,	"Stringlist capacity cannot be smaller than count"
 	ComStrs_sTabFailClear,	"Failed to clear tab control"
@@ -293,8 +291,7 @@ BEGIN
 	ComStrs_sInvalidIndex,	"Invalid index"
 	ComStrs_sInsertError,	"Unable to insert an item"
 	ComStrs_sPageIndexError,	"%d is an invalid PageIndex value.  PageIndex must be between 0 and %d"
-	SqlEditorMain_SNoSelectionAvailable,	"The is no selection available, search whole text?"
-	SynEditStrConst_SYNS_AttrException,	"Exception"
+	uSqlEditor_SNoSelectionAvailable,	"The is no selection available, search whole text?"
 	SynEditStrConst_SYNS_AttrFunction,	"Function"
 	SynEditStrConst_SYNS_AttrIdentifier,	"Identifier"
 	SynEditStrConst_SYNS_AttrNumber,	"Number"
@@ -310,26 +307,23 @@ BEGIN
 	SynEditStrConst_SYNS_ScrollInfoFmtTop,	"Top Line: %d"
 	SynEditStrConst_SYNS_EDuplicateShortcut,	"Shortcut already exists"
 	SynEditStrConst_SYNS_FilterSQL,	"SQL Files (*.sql)|*.sql"
-	Consts_SDockZoneVersionConflict,	"Error loading dock zone from the stream. Expecting version %d, but found %d."
-	Consts_SMultiSelectRequired,	"Multiselect mode must be on for this feature"
-	Consts_SErrorSettingCount,	"Error setting %s.Count"
-	Consts_SListBoxMustBeVirtual,	"Listbox (%s) style must be virtual in order to set Count"
-	Consts_SANSIEncoding,	"ANSI"
-	Consts_SASCIIEncoding,	"ASCII"
+	SynEditStrConst_SYNS_LangSQL,	"SQL"
 	Consts_SUnicodeEncoding,	"Unicode"
 	Consts_SBigEndianEncoding,	"Big Endian Unicode"
 	Consts_SUTF8Encoding,	"UTF-8"
 	Consts_SUTF7Encoding,	"UTF-7"
 	Consts_SPageControlNotSet,	"PageControl must first be assigned"
+	HelpIntfs_hNoTableOfContents,	"Unable to find a Table of Contents"
+	HelpIntfs_hNothingFound,	"No help found for %s"
+	HelpIntfs_hNoContext,	"No context-sensitive help installed"
+	HelpIntfs_hNoContextFound,	"No help found for context"
+	HelpIntfs_hNoTopics,	"No topic-based help system installed"
 	SynEditStrConst_SYNS_AttrComment,	"Comment"
 	SynEditStrConst_SYNS_AttrConditionalComment,	"Conditional Comment"
 	SynEditStrConst_SYNS_AttrDataType,	"Data Type"
 	SynEditStrConst_SYNS_AttrDefaultPackage,	"Default Packages"
 	SynEditStrConst_SYNS_AttrDelimitedIdentifier,	"Delimited Identifier"
-	Consts_SmkcDown,	"Down"
-	Consts_SmkcIns,	"Ins"
-	Consts_SmkcDel,	"Del"
-	Consts_SmkcShift,	"Shift+"
+	SynEditStrConst_SYNS_AttrException,	"Exception"
 	Consts_SmkcCtrl,	"Ctrl+"
 	Consts_SmkcAlt,	"Alt+"
 	Consts_SInsertLineError,	"Unable to insert a line"
@@ -342,10 +336,10 @@ BEGIN
 	Consts_SDockTreeRemoveError,	"Error removing control from dock tree"
 	Consts_SDockZoneNotFound,	" - Dock zone not found"
 	Consts_SDockZoneHasNoCtl,	" - Dock zone has no control"
-	Consts_SMsgDlgIgnore,	"&Ignore"
-	Consts_SMsgDlgAll,	"&All"
-	Consts_SMsgDlgNoToAll,	"N&o to All"
-	Consts_SMsgDlgYesToAll,	"Yes to &All"
+	Consts_SDockZoneVersionConflict,	"Error loading dock zone from the stream. Expecting version %d, but found %d."
+	Consts_SMultiSelectRequired,	"Multiselect mode must be on for this feature"
+	Consts_SANSIEncoding,	"ANSI"
+	Consts_SASCIIEncoding,	"ASCII"
 	Consts_SmkcBkSp,	"BkSp"
 	Consts_SmkcTab,	"Tab"
 	Consts_SmkcEsc,	"Esc"
@@ -358,10 +352,10 @@ BEGIN
 	Consts_SmkcLeft,	"Left"
 	Consts_SmkcUp,	"Up"
 	Consts_SmkcRight,	"Right"
-	Consts_SCannotDragForm,	"Cannot drag a form"
-	Consts_SVMetafiles,	"Metafiles"
-	Consts_SVEnhMetafiles,	"Enhanced Metafiles"
-	Consts_SVIcons,	"Icons"
+	Consts_SmkcDown,	"Down"
+	Consts_SmkcIns,	"Ins"
+	Consts_SmkcDel,	"Del"
+	Consts_SmkcShift,	"Shift+"
 	Consts_SVBitmaps,	"Bitmaps"
 	Consts_SMsgDlgWarning,	"Warning"
 	Consts_SMsgDlgError,	"Error"
@@ -374,10 +368,10 @@ BEGIN
 	Consts_SMsgDlgHelp,	"&Help"
 	Consts_SMsgDlgAbort,	"&Abort"
 	Consts_SMsgDlgRetry,	"&Retry"
-	Consts_SMenuReinserted,	"Menu inserted twice"
-	Consts_SMenuNotFound,	"Sub-menu is not in menu"
-	Consts_SNoTimers,	"Not enough timers available"
-	Consts_SGroupIndexTooLow,	"GroupIndex cannot be less than a previous menu item's GroupIndex"
+	Consts_SMsgDlgIgnore,	"&Ignore"
+	Consts_SMsgDlgAll,	"&All"
+	Consts_SMsgDlgNoToAll,	"N&o to All"
+	Consts_SMsgDlgYesToAll,	"Yes to &All"
 	Consts_SNoMDIForm,	"Cannot create form. No MDI forms are currently active"
 	Consts_SControlParentSetToSelf,	"A control cannot have itself as its parent"
 	Consts_SOKButton,	"OK"
@@ -390,11 +384,10 @@ BEGIN
 	Consts_SRetryButton,	"&Retry"
 	Consts_SAbortButton,	"Abort"
 	Consts_SAllButton,	"&All"
-	Consts_SNoCanvasHandle,	"Canvas does not allow drawing"
-	Consts_SInvalidImageSize,	"Invalid image size"
-	Consts_SInvalidImageList,	"Invalid ImageList"
-	Consts_SImageIndexError,	"Invalid ImageList Index"
-	Consts_SImageReadFail,	"Failed to read ImageList data from stream"
+	Consts_SCannotDragForm,	"Cannot drag a form"
+	Consts_SVMetafiles,	"Metafiles"
+	Consts_SVEnhMetafiles,	"Enhanced Metafiles"
+	Consts_SVIcons,	"Icons"
 	Consts_SImageWriteFail,	"Failed to write ImageList data to stream"
 	Consts_SWindowDCError,	"Error creating window device context"
 	Consts_SWindowClass,	"Error creating window class"
@@ -404,16 +397,16 @@ BEGIN
 	Consts_SMDIChildNotVisible,	"Cannot hide an MDI Child Form"
 	Consts_SVisibleChanged,	"Cannot change Visible in OnShow or OnHide"
 	Consts_SCannotShowModal,	"Cannot make a visible window modal"
+	Consts_SScrollBarRange,	"Scrollbar property out of range"
 	Consts_SPropertyOutOfRange,	"%s property out of range"
 	Consts_SMenuIndexError,	"Menu index out of range"
+	Consts_SMenuReinserted,	"Menu inserted twice"
+	Consts_SMenuNotFound,	"Sub-menu is not in menu"
+	Consts_SNoTimers,	"Not enough timers available"
+	Consts_SGroupIndexTooLow,	"GroupIndex cannot be less than a previous menu item's GroupIndex"
 	RTLConsts_SUnknownGroup,	"%s not in a class registration group"
 	RTLConsts_SUnknownProperty,	"Property %s does not exist"
 	RTLConsts_SWriteError,	"Stream write error"
-	HelpIntfs_hNoTableOfContents,	"Unable to find a Table of Contents"
-	HelpIntfs_hNothingFound,	"No help found for %s"
-	HelpIntfs_hNoContext,	"No context-sensitive help installed"
-	HelpIntfs_hNoContextFound,	"No help found for context"
-	HelpIntfs_hNoTopics,	"No topic-based help system installed"
 	Consts_SInvalidTabPosition,	"Tab position incompatible with current tab style"
 	Consts_SInvalidTabStyle,	"Tab style incompatible with current tab position"
 	Consts_SInvalidBitmap,	"Bitmap image is not valid"
@@ -422,6 +415,11 @@ BEGIN
 	Consts_SChangeIconSize,	"Cannot change the size of an icon"
 	Consts_SUnknownClipboardFormat,	"Unsupported clipboard format"
 	Consts_SOutOfResources,	"Out of system resources"
+	Consts_SNoCanvasHandle,	"Canvas does not allow drawing"
+	Consts_SInvalidImageSize,	"Invalid image size"
+	Consts_SInvalidImageList,	"Invalid ImageList"
+	Consts_SImageIndexError,	"Invalid ImageList Index"
+	Consts_SImageReadFail,	"Failed to read ImageList data from stream"
 	RTLConsts_SInvalidProperty,	"Invalid property value"
 	RTLConsts_SInvalidPropertyPath,	"Invalid property path"
 	RTLConsts_SInvalidPropertyValue,	"Invalid property value"
@@ -556,9 +554,9 @@ END
 /* x:\hss\3rdparty\SynEdit\Source\SynEdit.res */
 /* c:\program files\codegear\rad studio\5.0\lib\Buttons.res */
 /* c:\program files\codegear\rad studio\5.0\lib\ExtDlgs.res */
-/* .\SearchAndReplace\dlgSearchText.DFM */
-/* .\SearchAndReplace\dlgReplaceText.DFM */
-/* .\SearchAndReplace\dlgConfirmReplace.DFM */
-/* SqlEditorMain.dfm */
+/* Z:\source\SqlPrePro\Main\SearchAndReplace\dlgConfirmReplace.dfm */
+/* Z:\source\SqlPrePro\Main\SearchAndReplace\dlgSearchText.dfm */
+/* Z:\source\SqlPrePro\Main\SearchAndReplace\dlgReplaceText.dfm */
+/* Z:\source\SqlPrePro\Main\SqlEditorMain.dfm */
 /* Z:\source\SqlPrePro\Main\HsSqlEditor.res */
 /* Z:\source\SqlPrePro\Main\HsSqlEditor.drf */

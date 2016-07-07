@@ -95,7 +95,7 @@ type
 
 implementation
 
-{$R *.DFM}
+{$R *.dfm}
 
 { TTextSearchDialog }
 

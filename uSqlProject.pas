@@ -38,7 +38,7 @@ type
     procedure IterateAll(aMethod: TTextDataMethod);
 
     function SqlNameExists(aName: string): Boolean;
-    function TextDataByName(aName: string; var aTextData: THsTextData; var aType: TTextDataType): Boolean;
+    function TextDataByName(aName: string; out aTextData: THsTextData; out aType: TTextDataType): Boolean;
     property ProjectFolder: string read FProjectFolder write SetProjectFolder;
     property Folder[aType: TTextDataType]: string read GetFolder;
     property SqlList[aType: TTextDataType]: TTextDatas read GetSqlList;
@@ -112,6 +112,7 @@ begin
     dtMacro: Result := Macros;
     dtFunc: Result := Funcs;
     dtView: Result := Views;
+    else Result := nil;
   end;
 end;
 
@@ -176,7 +177,6 @@ end;
 procedure TSqlProject.LoadProject;
 var
   FileList: TStringList;
-  i: Integer;
 begin
   FileList := TStringList.Create;
   try
@@ -249,8 +249,8 @@ begin
   LoadProject;
 end;
 
-function TSqlProject.TextDataByName(aName: string; var aTextData: THsTextData;
- var aType: TTextDataType): Boolean;
+function TSqlProject.TextDataByName(aName: string; out aTextData: THsTextData;
+ out aType: TTextDataType): Boolean;
 var
   dt: TTextDataType;
   List: TTextDatas;

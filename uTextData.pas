@@ -10,18 +10,14 @@ type
 
   THsTextData = class(TCollectionItem)
   private
-    FTextDataID:Integer;
     FSQL:string;
     FSQLName:string;
-    FFragment:Boolean;
-    FSQLCategoryGUID:string;
     FFileName: string;
     FLoadFileName: string;
     FFolder: string;
     FLoadedName: string;
     FSqlType: TTextDataType;
     FIsModified: Boolean;
-    procedure SetFileName(const Value: string);
     procedure SetFolder(const Value: string);
     function GetDisplayText: string;
     procedure SetSqlType(const Value: TTextDataType);
@@ -116,15 +112,6 @@ begin
     finally
       sl.Free;
     end;
-  end;
-end;
-
-procedure THsTextData.SetFileName(const Value: string);
-begin
-  if Value <> FFileName then
-  begin
-    FFileName := Value;
-    FIsModified := True;
   end;
 end;
 
