@@ -616,7 +616,7 @@ begin
   FSql.OnMouseWheel := SqlMouseWheel;
   FSql.OnJumpToDeclaration := DoDeclaration;
   FSql.Highlighter := FHighlighter;
-  FSql.Font.OnChange := DoSqlFontChanged;
+  
 
   EnableCodeComplete;
 
@@ -735,6 +735,7 @@ procedure TSqlEditorMainFrm.PageControl1Change(Sender: TObject);
 begin
   if PageControl1.ActivePage = tsCompiled then
   begin
+    DoSqlFontChanged(nil);
     FCompiledSql.Text := '';
     if Assigned(ActiveItem) then
     begin
