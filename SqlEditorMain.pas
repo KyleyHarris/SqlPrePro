@@ -22,7 +22,9 @@ uses
   uTextData,
   uSqlGenerator,
 // synedit code
+{$IFDEF CodeComplete}
   SynCompletionProposal,
+{$ENDIF}
   SynHighlighterSQL,
   SynEditRegexSearch,
   SynEditSearch,
@@ -124,14 +126,19 @@ type
     FPreviewSql: TSqlEditor;
     FProject: TSqlProject;
     FCompiledSql: TSqlEditor;
+    {$IFDEF CodeComplete}
     FCodeC: TSynCompletionProposal;
+    {$endif}
     FHighlighter: TSynSQLSyn;
     FProjectFolder: string;
     FTables: TStringList;
+    {$ifdef CodeComplete}
     procedure CodeCExecute(Kind: SynCompletionType; Sender: TObject;
       var CurrentInput: string; var x, y: Integer;
       var CanExecute: Boolean);
+    {$Endif}
 
+    procedure EnableCodeComplete;
     procedure FocusSqlEdit;
     procedure DoContextHelp(Sender: TObject; word : string);
     procedure DoDeclaration(Sender: TObject; word : string);
@@ -320,6 +327,22 @@ begin
 
 end;
 
+procedure TSqlEditorMainFrm.EnableCodeComplete;
+begin
+{$ifdef CodeComplete}
+  FCodeC := TSynCompletionProposal.Create(Self);
+  FCodeC.OnExecute := CodeCExecute;
+
+  FCodeC.AddEditor(FSql);
+  FCodeC.Columns.Add.BiggestWord := 'propertyand';
+  FCodeC.Options := [scoLimitToMatchedText, scoUseInsertList, scoUsePrettyText, scoUseBuiltInTimer, scoEndCharCompletion, scoCompleteWithTab, scoCompleteWithEnter];
+  FCodeC.EndOfTokenChr := '()[]. ';
+  FCodeC.TriggerChars := '#.@_';
+  FCodeC.TimerInterval := 200;
+
+{$Endif}
+end;
+
 function TSqlEditorMainFrm.FileString(aFile: string): string;
 begin
   with TFileStream.Create(aFile, fmOpenRead) do
@@ -401,6 +424,7 @@ begin
 
 end;
 
+{$IFDEF CodeComplete}
 procedure TSqlEditorMainFrm.CodeCExecute(Kind: SynCompletionType; Sender: TObject;
   var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
 var
@@ -566,6 +590,7 @@ begin
   end;
 
 end;
+{$EndIf}
 
 function TSqlEditorMainFrm.CompiledSQL(aSql: string): string;
 begin
@@ -626,26 +651,17 @@ begin
   FHighlighter.TableNameAttri.Foreground := clBlack;
   FHighlighter.TableNameAttri.Style := [fsBold];
   FHighlighter.SQLDialect := sqlMSSQL2K;
-
-  FCodeC := TSynCompletionProposal.Create(Self);
-  FCodeC.OnExecute := CodeCExecute;
   FSql := TSqlEditor.Create(self);
   FSql.OnEnter := DoEnterSql;
   FSql.Parent := tsSql;
   FSql.Align := alClient;
   FSql.OnChange := DoSqlEdit;
-  FCodeC.AddEditor(FSql);
-  FCodeC.Columns.Add.BiggestWord := 'propertyand';
-  FCodeC.Options := [scoLimitToMatchedText, scoUseInsertList, scoUsePrettyText, scoUseBuiltInTimer, scoEndCharCompletion, scoCompleteWithTab, scoCompleteWithEnter];
-  FCodeC.EndOfTokenChr := '()[]. ';
-  FCodeC.TriggerChars := '#.@_';
-  FCodeC.TimerInterval := 200;
   FSql.OnMouseWheel := SqlMouseWheel;
   FSql.OnContextHelp := DoContextHelp;
   FSql.OnJumpToDeclaration := DoDeclaration;
-
-
   FSql.Highlighter := FHighlighter;
+
+  EnableCodeComplete;
 
   FCompiledSql := TSqlEditor.Create(self);
   FCompiledSql.ReadOnly := True;

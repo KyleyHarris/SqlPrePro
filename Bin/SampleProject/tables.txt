@@ -1,11 +1,71 @@
+ 
+  
+[AccountAuthentication]
+ AccountId=Guid
+ IPAddress=string
+ ExpiryDate=DateTime
+  
 [Account]
-Id=
-Name=
-Email=
-Password=
-[Series]
-Id=
-Name=
+ UserName=string
+ EmailAddress=string
+ EncryptedPassword=Byte[]
+  
 [CollationProject]
-Id=
-Name=
+ AccountID=Guid
+ Name=string
+ Description=string
+ ProjectSchema=int
+ AnonymousPrivelage=int
+  
+[CollationProjectLock]
+ CollationProjectId=Guid
+ IsLocked=Boolean
+  
+[CollationProjectAccess]
+ AccountId=Guid
+ CollationProjectId=Guid
+ DelPrivelage=int
+ Privelage=int
+  
+[Series]
+ CollationProjectId=Guid
+ TableName=string
+ Description=string
+  
+[SeriesField]
+ SeriesId=Guid
+ FieldName=string
+ FieldType=int
+ FieldSize=int
+ IsUnique=Boolean
+ Indexed=Boolean
+  
+[Log_ProjectQuery]
+ AccountId=Guid
+ TimeMS=int
+ ExecuteCount=int
+ QueryCount=int
+ ExecuteVolume=int
+ QueryVolume=int
+  
+[Log_ProjectQueryWithDetails]
+ RequestPacket=Byte[]
+  
+[SqlServer]
+ ConnectionString=string
+ Description=string
+  
+[CollationLocation]
+ CollationProjectId=Guid
+ SqlServerId=Guid
+  
+[SeriesFieldLookup]
+ CollationProjectId=Guid
+ LookupName=string
+ LookupType=string
+  
+[SeriesFieldLookupItem]
+ SeriesFieldLookupId=Guid
+ Position=int
+ DataValue=string
+ Display=string
