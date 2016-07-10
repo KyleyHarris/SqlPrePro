@@ -36,13 +36,16 @@ Known Issues:
 
 unit dlgConfirmReplace;
 
-{$I SynEdit.inc}
+{$I synedit.inc}
 
 interface
 
 uses
+{$IFDEF MSWINDOWS}
   Windows,
-  Messages,
+{$ELSE}
+  lcltype,
+{$ENDIF}
   SysUtils,
   Classes,
   Graphics,
@@ -72,7 +75,11 @@ var
 
 implementation
 
-{$R *.dfm}
+{$IFnDEF FPC}
+  {$R *.dfm}
+{$ELSE}
+  {$R *.lfm}
+{$ENDIF}
 
 resourcestring
   SAskReplaceText = 'Replace this occurence of "%s"?';
@@ -81,7 +88,11 @@ resourcestring
 
 procedure TConfirmReplaceDialog.FormCreate(Sender: TObject);
 begin
+{$IFDEF MSWINDOWS}
   Image1.Picture.Icon.Handle := LoadIcon(0, IDI_QUESTION);
+{$ELSE}
+  Image1.Picture.LoadFromResourceName(HInstance,'image');
+{$ENDIF}
 end;
 
 procedure TConfirmReplaceDialog.FormDestroy(Sender: TObject);

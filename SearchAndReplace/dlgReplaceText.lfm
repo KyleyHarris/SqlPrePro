@@ -1,0 +1,35 @@
+inherited TextReplaceDialog: TTextReplaceDialog
+  Caption = 'Replace text'
+  inherited gbSearchOptions: TGroupBox
+    Top = 70
+    TabOrder = 2
+  end
+  inherited rgSearchDirection: TRadioGroup
+    Top = 70
+    TabOrder = 3
+  end
+  inherited btnOK: TButton
+    Top = 179
+    TabOrder = 4
+  end
+  inherited btnCancel: TButton
+    Top = 179
+    TabOrder = 5
+  end
+  object Label2: TLabel[6]
+    Left = 8
+    Height = 13
+    Top = 41
+    Width = 75
+    Caption = '&Replace with:'
+    ParentColor = False
+  end
+  object cbReplaceText: TComboBox[7]
+    Left = 96
+    Height = 20
+    Top = 37
+    Width = 228
+    ItemHeight = 0
+    TabOrder = 1
+  end
+end

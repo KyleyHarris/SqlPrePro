@@ -3,7 +3,8 @@ unit uTextData;
 interface
 
 uses
-  classes, Contnrs;
+  classes;
+
 type
 
   TTextDataType = (dtNone,dtProc, dtInclude, dtMacro, dtFunc, dtView);
@@ -58,6 +59,11 @@ type
 implementation
 
 uses
+{$IFDEF FPC}
+  LazFileUtils,
+{$ELSE}
+  FileUtils,
+{$ENDIF}
   SysUtils,
   SynEdit,
   SynHighlighterSQL;
@@ -80,7 +86,7 @@ begin
       SaveToFile(FileName);
       if FLoadFileName <> FileName then
       begin
-        DeleteFile(FLoadFileName);
+        DeleteFileUTF8(FLoadFileName); { *Converted from DeleteFile* }
         FLoadFileName := FileName;
       end;
       FLoadedName := SqlName;
@@ -95,7 +101,7 @@ procedure THsTextData.LoadFromDisk(aFileName: string);
 var
   sl: TStringList;
 begin
-  if FileExists(aFileName) then
+  if FileExistsUTF8(aFileName) { *Converted from FileExists* } then
   begin
     sl := TStringList.Create;
     try

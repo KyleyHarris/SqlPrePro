@@ -3,25 +3,25 @@ unit SqlEditorMain;
 interface
 
 uses
-  Types,
-  {$IFDEF MSWINDOWS}
+{$IFDEF MSWINDOWS}
   Windows,
-  {$ELSE}
-  lcltype,
-  {$ENDIF}
-  Messages,
+  Types,
+{$ELSE}
+  lcltype, lclIntf,
+{$ENDIF}
   SysUtils,
   Variants,
   Classes,
   Graphics,
-  Dialogs,
   Controls,
   Forms,
+  Dialogs,
   SynEdit,
   ExtCtrls,
   ComCtrls,
   StdCtrls,
   ActnList,
+  Menus,
 // my code
   uSqlProject,
   uTextData,
@@ -31,10 +31,8 @@ uses
   SynCompletionProposal,
 {$ENDIF}
 // Others
-  ImgList,
-  StdActns,
-  Menus,
-  uSqlEditor, SynHighlighterSQL;
+  uSqlEditor, 
+  SynHighlighterSQL;
 
 const
   Titles :Array[TTextDataType] of string = ('None', 'Procedures','Includes', 'Macros','Functions','Views');
@@ -166,12 +164,19 @@ var
 implementation
 
 uses
-  Math, IniFiles;
+{$IFDEF FPC}
+  LazFileUtils,
+{$ELSE}
+  FileUtils,
+  Math,
+{$ENDIF}
+  IniFiles;
 
-{$R *.dfm}
-
-
-
+{$IFnDEF FPC}
+  {$R *.dfm}
+{$ELSE}
+  {$R *.lfm}
+{$ENDIF}
 
 procedure TSqlEditorMainFrm.actCompileExecute(Sender: TObject);
 begin
@@ -616,7 +621,6 @@ begin
   FSql.OnMouseWheel := SqlMouseWheel;
   FSql.OnJumpToDeclaration := DoDeclaration;
   FSql.Highlighter := FHighlighter;
-  
 
   EnableCodeComplete;
 
@@ -626,6 +630,7 @@ begin
   FCompiledSql.Align := alClient;
   FCompiledSql.Highlighter := FHighlighter;
   FCompiledSql.OnMouseWheel := SqlMouseWheel;
+
   FPreviewSql := TSqlEditor.Create(self);
   FPreviewSql.ReadOnly := True;
   FPreviewSql.Parent := PreviewPanel;
@@ -636,6 +641,7 @@ begin
   if ParamStr(1) <> '' then
     ProjectFolder := ParamStr(1) else
     ProjectFolder := ExtractFilePath(ParamStr(0))+'SampleProject';
+
 
   PageControl1.ActivePage := tsSql;
   pcData.ActivePage := tabDataAll;
@@ -696,15 +702,17 @@ end;
 function TSqlEditorMainFrm.GetActiveHeaderNode: TTreeNode;
 begin
   Result := ViewAllItems.Selected;
-  if Result.Data <> nil then
+  if assigned(Result) and (Result.Data <> nil) then
     Result := Result.Parent;
 end;
 
 function TSqlEditorMainFrm.GetActiveItem: THsTextData;
 begin
-  if ViewAllItems.Selected.Data <> nil then
-    Result := THsTextData(ViewAllItems.Selected.Data) else
-    Result := nil;
+  Result := nil;
+  if assigned(ViewAllItems.Selected) then
+  begin
+    Result := THsTextData(ViewAllItems.Selected.Data);
+  end;
 end;
 
 function TSqlEditorMainFrm.GetActiveList: TTextDatas;
@@ -729,7 +737,6 @@ begin
     Free;
   end;
 end;
-
 
 procedure TSqlEditorMainFrm.PageControl1Change(Sender: TObject);
 begin
@@ -955,7 +962,7 @@ var
 begin
   FProjectFolder := Value;
   FProject.ProjectFolder := Value;
-  if FileExists(FProject.ProjectFolder+'\Tables.Txt') then
+  if FileExistsUTF8(FProject.ProjectFolder+'\Tables.Txt') { *Converted from FileExists* } then
   begin
     Ini := TIniFile.Create(FProject.ProjectFolder+'\Tables.Txt');
     try
@@ -987,6 +994,7 @@ begin
     Handled := True;
   end;
 end;
+
 
 procedure TSqlEditorMainFrm.Timer1Timer(Sender: TObject);
 var
@@ -1023,9 +1031,10 @@ end;
 
 procedure TSqlEditorMainFrm.ViewAllItemsChange(Sender: TObject; Node: TTreeNode);
 begin
-  if Assigned(Node.Data) then
-    EditingItem := TObject(Node.Data) as THsTextData else
-    EditingItem := nil;
+  EditingItem := nil;
+  if Assigned(Node) then
+    EditingItem := TObject(Node.Data) as THsTextData;
+
   if Sender <> ViewAllItems then
     ViewAllItems.Selected := self.Node[EditingItem];
 end;

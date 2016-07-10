@@ -31,11 +31,10 @@
 unit uTemplate;
 
 interface
+
 uses
   sysutils,
-  classes,
-  Contnrs,
-  uHssStringList;
+  classes;
 
 const BLANK_PARAM='_INSERTBLANK_';
 type
@@ -78,7 +77,6 @@ implementation
 uses
   StrUtils,
   Math;
-
 
 
 type

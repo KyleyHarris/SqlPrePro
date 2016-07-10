@@ -1,5 +1,5 @@
 {
-  Copyright © 1999 by Harris Software Ltd
+  Copyright Â© 1999 by Harris Software Ltd
   Author:Kyley Harris
   Kyley@HarrisSoftware.com
 ------------------------------------------------------------------------------}
@@ -27,8 +27,9 @@ type
     procedure ExtractUpToMarker(AStrings:TStrings;Marker:string);
 
     procedure TrimLines;
-    function InsertStringsAtMarker(AStrings:string;Marker:string;DeleteMarker:boolean=true):boolean;overload;
-    function InsertStringsAtMarker(AStrings:TStrings;Marker:string;DeleteMarker:boolean=true):boolean;overload;
+    function InsertStringsAtMarker(AStrings:String;Marker:string;DeleteMarker:boolean=true): Boolean; overload;
+    function InsertStringsAtMarker(AStrings:TStrings;Marker:string;DeleteMarker:boolean=true): Boolean; overload;
+
     property AppendStringsIndex:integer read FAppendStringsIndex write SetAppendStringsIndex;
   end;
 implementation
@@ -122,8 +123,7 @@ begin
 end;
 
 
-function THssStringList.InsertStringsAtMarker(AStrings: string; Marker: string;
-  DeleteMarker: boolean): boolean;
+function THssStringList.InsertStringsAtMarker(AStrings: string; Marker: string; DeleteMarker: boolean): Boolean;
 var
   sl: TStringList;
 begin
@@ -133,8 +133,7 @@ begin
   sl.Free;
 end;
 
-function THssStringList.InsertStringsAtMarker(AStrings: TStrings;
-  Marker: string;DeleteMarker:boolean): boolean;
+function THssStringList.InsertStringsAtMarker(AStrings: TStrings; Marker: string;DeleteMarker:boolean): Boolean;
 var
   AMarkerPosition:integer;
 begin

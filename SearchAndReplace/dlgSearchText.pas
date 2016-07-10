@@ -36,12 +36,15 @@ Known Issues:
 
 unit dlgSearchText;
 
-{$I SynEdit.inc}
+{$I synedit.inc}
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+{$IFDEF MSWINDOWS}
+  Windows,
+{$ENDIF}
+  SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, ExtCtrls;
 
 type
@@ -95,7 +98,11 @@ type
 
 implementation
 
-{$R *.dfm}
+{$IFnDEF FPC}
+  {$R *.dfm}
+{$ELSE}
+  {$R *.lfm}
+{$ENDIF}
 
 { TTextSearchDialog }
 

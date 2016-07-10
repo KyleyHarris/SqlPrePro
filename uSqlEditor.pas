@@ -3,27 +3,35 @@ unit uSqlEditor;
 interface
 
 uses
+{$IFDEF MSWINDOWS}
+  Windows,
+{$ELSE}
+  LCLIntf, LCLType,
+{$ENDIF}
   Classes,
   Types,
   SynHighlighterSQL,
   SynEditRegexSearch,
   SynEditSearch,
   SynEditTypes,
-  SynEdit,
-  Windows;
+  SynEdit;
 
 type
   TJumpToDeclarationEvent = procedure(Sender: TObject; word : string)
     of object;
+
+  { TSqlEditor }
 
   TSqlEditor = class(TSynEdit)
   private
     FOnJumpToDeclaration: TJumpToDeclarationEvent;
     procedure DoSearchReplaceText(AReplace, ABackwards: boolean);
     procedure ShowSearchReplaceDialog(AReplace: boolean);
-    procedure KeyUpHandler(Sender: TObject; var Key: Word;
-    Shift: TShiftState);
+    procedure KeyUpHandler(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure SetOnJumpToDeclaration(const Value: TJumpToDeclarationEvent);
+{$IFDEF FPC}
+    function GetWordAtCursor : string;
+{$ENDIF}
   protected
     SearchRegEx: TSynEditRegexSearch;
     Search: TSynEditSearch;
@@ -31,9 +39,13 @@ type
       MousePos: TPoint): Boolean; override;
   public
     procedure AfterConstruction; override;
+    procedure BeforeDestruction; override;
     procedure IncreaseFontSize;
     procedure DecreaseFontSize;
     property OnMouseWheel;
+{$IFDEF FPC}
+    property WordAtCursor: string read GetWordAtCursor;
+{$ENDIF}
     property OnJumpToDeclaration: TJumpToDeclarationEvent read FOnJumpToDeclaration write SetOnJumpToDeclaration;
   end;
 
@@ -55,8 +67,14 @@ procedure TSqlEditor.AfterConstruction;
 begin
   inherited;
   SearchRegEx := TSynEditRegexSearch.Create(self);
-  Search := TSynEditSearch.Create(Self);
-  AddKeyDownHandler(KeyUpHandler);
+  Search := TSynEditSearch.Create({$IFNDEF FPC}Self{$ENDIF});
+//  AddKeyDownHandler(KeyUpHandler);
+end;
+
+procedure TSqlEditor.BeforeDestruction;
+begin
+  FreeAndNil(Search);
+  inherited;
 end;
 
 function TSqlEditor.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;
@@ -90,8 +108,7 @@ resourcestring
   SNoSelectionAvailable = 'The is no selection available, search whole text?';
 
 
-procedure TSQLEditor.DoSearchReplaceText(AReplace: boolean;
-  ABackwards: boolean);
+procedure TSqlEditor.DoSearchReplaceText(AReplace, ABackwards: boolean);
 var
   Options: TSynSearchOptions;
 begin
@@ -121,13 +138,12 @@ begin
 
   if gbSearchWholeWords then
     Include(Options, ssoWholeWord);
-  if gbSearchRegex then
-    SearchEngine := SearchRegEx else
-    SearchEngine := Search;
 
   if SearchReplace(gsSearchText, gsReplaceText, Options) = 0 then
   begin
+{$IFDEF MSWINDOWS}
     MessageBeep(MB_ICONASTERISK);
+{$ENDIF}
 
     if ssoBackwards in Options then
       BlockEnd := BlockBegin
@@ -193,6 +209,11 @@ begin
   FOnJumpToDeclaration := Value;
 end;
 
+function TSqlEditor.GetWordAtCursor: string;
+begin
+  Result := GetWordAtRowCol(CaretXY);
+end;
+
 procedure TSqlEditor.ShowSearchReplaceDialog(AReplace: boolean);
 var
   dlg: TTextSearchDialog;
@@ -212,11 +233,11 @@ begin
     SearchText := gsSearchText;
     if gbSearchTextAtCaret then begin
       // if something is selected search for that text
-      if SelAvail and (BlockBegin.Line = BlockEnd.Line)
+      if SelAvail and (BlockBegin.Y = BlockEnd.Y)
       then
         SearchText := SelText
       else
-        SearchText := GetWordAtRowCol(CaretXY);
+        SearchText := WordAtCursor;
     end;
     SearchTextHistory := gsSearchTextHistory;
     if AReplace then with dlg as TTextReplaceDialog do begin

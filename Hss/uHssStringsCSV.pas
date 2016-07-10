@@ -1,11 +1,12 @@
 {
-  Copyright © 1999 by Harris Software Ltd
+  Copyright Â© 1999 by Harris Software Ltd
   Author:Kyley Harris
   Kyley@HarrisSoftware.com
 ------------------------------------------------------------------------------}
  unit uHssStringsCSV;
 
 interface
+
 uses
   sysutils,
   classes;

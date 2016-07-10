@@ -1,7 +1,9 @@
 program HsSqlEditor;
 
 uses
-  Fastmm4,
+{$IFDEF FPC}
+  Interfaces,
+{$ENDIF}
   Forms,
   SqlEditorMain in 'SqlEditorMain.pas' {SqlEditorMainFrm},
   uSqlGenerator in 'uSqlGenerator.pas',

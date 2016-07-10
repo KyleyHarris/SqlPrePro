@@ -36,12 +36,15 @@ Known Issues:
 
 unit dlgReplaceText;
 
-{$I SynEdit.inc}
+{$I synedit.inc}
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+{$IFDEF MSWINDOWS}
+  Windows,
+{$ENDIF}
+  SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   dlgSearchText, StdCtrls, ExtCtrls;
 
 type
@@ -62,7 +65,11 @@ type
 
 implementation
 
-{$R *.dfm}
+{$IFnDEF FPC}
+  {$R *.dfm}
+{$ELSE}
+  {$R *.lfm}
+{$ENDIF}
 
 { TTextReplaceDialog }
 

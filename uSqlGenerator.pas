@@ -394,7 +394,6 @@ var
     var
       s:string;
       iPos:integer;
-      data :string;
       iMDP,iMDE:integer;
       Macro:THsTextData;
       Kind:TtkTokenKind;
@@ -426,7 +425,6 @@ var
             CodeStack.Macro := Macro;
             CodeStack.InsertPos := iPos;
             iMDP := SQL.GetTokenPos + Length(Macro.SQLName);
-            data := '';
             repeat
               SQL.Next;
 

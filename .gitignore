@@ -2,3 +2,5 @@
 *.map
 *.local
 dcu/
+lib
+Bin

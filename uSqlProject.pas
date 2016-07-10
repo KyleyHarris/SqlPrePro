@@ -52,6 +52,11 @@ type
 implementation
 
 uses
+{$IFDEF FPC}
+  LazFileUtils,
+{$ELSE}
+  FileUtils,
+{$ENDIF}
   Masks;
 
 { TSqlProject }
@@ -143,10 +148,10 @@ class procedure TSqlProject.AddQuickFind(AFileName, APath: string;  AResults: TS
   begin
     Dirs := TStringList.Create;
     try
-      if FindFirst(ABrowsePath+'\*.*',faAnyFile,s) = 0 then
+      if FindFirstUTF8(ABrowsePath+'\*.*',faAnyFile,s) { *Converted from FindFirst* } = 0 then
       try
         repeat
-          if DirectoryExists(ABrowsePath+'\'+s.Name) then
+          if DirectoryExistsUTF8(ABrowsePath+'\'+s.Name) { *Converted from DirectoryExists* } then
           begin
             if (Pos( '.\',s.name)=0) and (s.Name <> '.') and (s.Name <> '..') then
               Dirs.Add(ABrowsePath+'\'+s.Name);
@@ -155,14 +160,14 @@ class procedure TSqlProject.AddQuickFind(AFileName, APath: string;  AResults: TS
           begin
             AResults.Add(lowercase(ABrowsePath+'\'+s.Name));
           end;
-        until (FindNext(s) <> 0) ;
+        until (FindNextUTF8(s) { *Converted from FindNext* } <> 0) ;
 
         if ASearchSubfolders  then
           for i := 0 to Dirs.Count -1 do
            Iterate(Dirs[i]);
 
       finally
-        FindClose(s);
+        FindCloseUTF8(s); { *Converted from FindClose* }
       end;
     finally
       FreeAndNil(Dirs);
