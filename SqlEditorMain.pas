@@ -3,12 +3,10 @@ unit SqlEditorMain;
 interface
 
 uses
-{$IFDEF MSWINDOWS}
-  Windows,
-{$ENDIF}
 {$IFDEF FPC}
   lcltype, lclIntf,
 {$ELSE}
+  Windows,
   Types,
   ImgList,
 {$ENDIF}
