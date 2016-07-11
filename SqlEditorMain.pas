@@ -5,9 +5,12 @@ interface
 uses
 {$IFDEF MSWINDOWS}
   Windows,
-  Types,
-{$ELSE}
+{$ENDIF}
+{$IFDEF FPC}
   lcltype, lclIntf,
+{$ELSE}
+  Types,
+  ImgList,
 {$ENDIF}
   SysUtils,
   Variants,
@@ -167,7 +170,7 @@ uses
 {$IFDEF FPC}
   LazFileUtils,
 {$ELSE}
-  FileUtils,
+  uFileUtils,
   Math,
 {$ENDIF}
   IniFiles;
@@ -312,7 +315,7 @@ begin
   FCodeC.OnExecute := CodeCExecute;
 
   FCodeC.AddEditor(FSql);
-  FCodeC.Columns.Add.BiggestWord := 'propertyand';
+//  FCodeC.Columns.Add.BiggestWord := 'propertyand';
   FCodeC.Options := [scoLimitToMatchedText, scoUseInsertList, scoUsePrettyText, scoUseBuiltInTimer, scoEndCharCompletion, scoCompleteWithTab, scoCompleteWithEnter];
   FCodeC.EndOfTokenChr := '()[]. ';
   FCodeC.TriggerChars := '#.@_';
@@ -962,7 +965,7 @@ var
 begin
   FProjectFolder := Value;
   FProject.ProjectFolder := Value;
-  if FileExistsUTF8(FProject.ProjectFolder+'\Tables.Txt') { *Converted from FileExists* } then
+  if FileExistsUTF8(FProject.ProjectFolder+'\Tables.Txt') then
   begin
     Ini := TIniFile.Create(FProject.ProjectFolder+'\Tables.Txt');
     try
@@ -1031,9 +1034,14 @@ end;
 
 procedure TSqlEditorMainFrm.ViewAllItemsChange(Sender: TObject; Node: TTreeNode);
 begin
-  EditingItem := nil;
   if Assigned(Node) then
+  begin
     EditingItem := TObject(Node.Data) as THsTextData;
+  end
+  else
+  begin
+    EditingItem := nil;
+  end;
 
   if Sender <> ViewAllItems then
     ViewAllItems.Selected := self.Node[EditingItem];

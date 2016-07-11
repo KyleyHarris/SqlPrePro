@@ -209,10 +209,12 @@ begin
   FOnJumpToDeclaration := Value;
 end;
 
+{$IFDEF FPC}
 function TSqlEditor.GetWordAtCursor: string;
 begin
   Result := GetWordAtRowCol(CaretXY);
 end;
+{$ENDIF}
 
 procedure TSqlEditor.ShowSearchReplaceDialog(AReplace: boolean);
 var
@@ -233,7 +235,7 @@ begin
     SearchText := gsSearchText;
     if gbSearchTextAtCaret then begin
       // if something is selected search for that text
-      if SelAvail and (BlockBegin.Y = BlockEnd.Y)
+      if SelAvail and {$IFDEF FPC}(BlockBegin.Y = BlockEnd.Y){$ELSE} (BlockBegin.Line = BlockEnd.Line) {$ENDIF}
       then
         SearchText := SelText
       else

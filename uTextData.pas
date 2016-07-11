@@ -62,7 +62,7 @@ uses
 {$IFDEF FPC}
   LazFileUtils,
 {$ELSE}
-  FileUtils,
+  uFileUtils,
 {$ENDIF}
   SysUtils,
   SynEdit,
@@ -86,7 +86,7 @@ begin
       SaveToFile(FileName);
       if FLoadFileName <> FileName then
       begin
-        DeleteFileUTF8(FLoadFileName); { *Converted from DeleteFile* }
+        DeleteFileUTF8(FLoadFileName);
         FLoadFileName := FileName;
       end;
       FLoadedName := SqlName;
@@ -101,7 +101,7 @@ procedure THsTextData.LoadFromDisk(aFileName: string);
 var
   sl: TStringList;
 begin
-  if FileExistsUTF8(aFileName) { *Converted from FileExists* } then
+  if FileExistsUTF8(aFileName) then
   begin
     sl := TStringList.Create;
     try
@@ -196,9 +196,6 @@ begin
   end;
 
 end;
-
-
-
 
 function THsTextData.GetDisplayText: string;
 begin
