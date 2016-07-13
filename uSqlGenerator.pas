@@ -8,17 +8,18 @@ uses
   SysUtils,
   uTemplate,
   SynHighlighterSQL,
-  Contnrs;
+  Contnrs, uLogger;
 
 type
   TSqlGenerator = class(TObject)
   private
+    FLog: ILogger;
     FMacros:TStringList;
     FIncludes:TStringList;
     procedure LoadMacros(aMacros: TTextDatas);
     procedure LoadIncludes(aIncludes: TTextDatas);
   public
-    constructor Create(aMacros, aIncludes: TTextDatas);
+    constructor Create(aMacros, aIncludes: TTextDatas; aLog: ILogger);
     destructor Destroy; override;
     function CompileSql(AString: string): string;
   end;
@@ -38,12 +39,14 @@ begin
   result := StringReplace(s,afind,areplace,[rfReplaceAll,rfIgnoreCase]);
 end;
 
-constructor TSqlGenerator.Create(aMacros, aIncludes: TTextDatas);
+constructor TSqlGenerator.Create(aMacros, aIncludes: TTextDatas; aLog: ILogger);
 begin
   FMacros := TStringList.Create;
   FIncludes := TStringList.Create;
+  FLog := aLog;
   LoadMacros(aMacros);
   LoadIncludes(aIncludes);
+
 end;
 
 destructor TSqlGenerator.Destroy;

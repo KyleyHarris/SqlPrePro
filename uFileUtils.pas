@@ -31,7 +31,7 @@ end;
 
 function DirectoryExistsUTF8(const APath: string; AFollowLink: Boolean): Boolean;
 begin
-  Result := DirectoryExists(APath,AFollowLink);
+  Result := DirectoryExists(APath);
 end;
 
 function FindNextUTF8(var ARecord: TSearchRec): Integer;

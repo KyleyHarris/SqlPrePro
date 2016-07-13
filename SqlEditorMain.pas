@@ -32,7 +32,8 @@ uses
   SynCompletionProposal,
 {$ENDIF}
 // Others
-  uSqlEditor, 
+  uSqlEditor,
+  uLogger,
   SynHighlighterSQL;
 
 const
@@ -40,8 +41,20 @@ const
 
 type
 
+  TToolCommand = class(TComponent)
+  private
+    FCommand: string;
+    FParamStr: string;
+    procedure SetCommand(const Value: string);
+    procedure SetParamStr(const Value: string);
+  published
+  public
+    procedure Go;
+    property Command: string read FCommand write SetCommand;
+    property ParamStr: string read FParamStr write SetParamStr;
+  end;
 
-  TSqlEditorMainFrm = class(TForm)
+  TSqlEditorMainFrm = class(TForm, ILogger)
     PageControl1: TPageControl;
     Panel1: TPanel;
     tsSql: TTabSheet;
@@ -75,6 +88,9 @@ type
     SaveAll1: TMenuItem;
     Compile1: TMenuItem;
     New1: TMenuItem;
+    Panel5: TPanel;
+    ProjectName: TEdit;
+    Label2: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure actNewUpdate(Sender: TObject);
     procedure actNewExecute(Sender: TObject);
@@ -99,6 +115,7 @@ type
     procedure ViewRelatedItemsEditing(Sender: TObject; Node: TTreeNode; var AllowEdit: Boolean);
     procedure Timer1Timer(Sender: TObject);
   private
+    FTools: TStringList;
     FLastWordAtCursor: string;
     FGenerator: TSqlGenerator;
     FEditingItem: THsTextData;
@@ -118,6 +135,9 @@ type
       var CanExecute: Boolean);
     {$Endif}
 
+    procedure ClearTables;
+    procedure LoadTables;
+    procedure Log(AValue: string);
     procedure DoSqlFontChanged(Sender: TObject);
     procedure EnableCodeComplete;
     procedure FocusSqlEdit;
@@ -135,6 +155,8 @@ type
     function GetActiveList: TTextDatas;
     function GetActiveFolder: string;
     function GetActiveItem: THsTextData;
+    procedure BuildTools;
+    procedure ClickTool(Sender: TObject);
 
     procedure DisplayPeek(word: string; aSwitch: boolean=False);
 
@@ -171,7 +193,8 @@ uses
   uFileUtils,
   Math,
 {$ENDIF}
-  IniFiles;
+  IniFiles,
+  ShellAPI;
 
 {$IFnDEF FPC}
   {$R *.dfm}
@@ -181,9 +204,13 @@ uses
 
 procedure TSqlEditorMainFrm.actCompileExecute(Sender: TObject);
 begin
-  FGenerator := TSqlGenerator.Create(FProject.Macros, FProject.Includes);
+  FGenerator := TSqlGenerator.Create(FProject.Macros, FProject.Includes, Self);
   try
+    Memo1.Clear;
+    Log('Compiling To:' + FProject.ProjectFolder + '\Compiled');
     FProject.IterateAll(CompileTextData);
+    PageControl1.ActivePage := tsMessage;
+    ShowMessage('Compiled');
   finally
     FreeAndNil(FGenerator);
   end;
@@ -246,6 +273,57 @@ begin
     TextData := aSqlList.Add;
     TextData.LoadFromDisk(aFiles[i]);
   end;
+end;
+
+procedure TSqlEditorMainFrm.BuildTools;
+var
+  MenuItem: TMenuItem;
+  ToolItem: TMenuItem;
+  Data: TStringList;
+  fileName: string;
+  Tool: TToolCommand;
+  i: Integer;
+begin
+  FreeAndNil(FTools);
+  fileName := ProjectFolder+'\tools.txt';
+
+  if FileExistsUTF8(fileName) then
+  begin
+    MenuItem := TMenuItem.Create(self);
+    MenuItem.Caption := 'Tools';
+    MainMenu1.Items.Add(MenuItem);
+    Data := TStringList.Create;
+    Data.Delimiter := ' ';
+    FTools := TStringList.Create;
+    try
+      FTools.LoadFromFile(fileName);
+      for I := 0 to FTools.Count - 1 do
+      begin
+        Data.DelimitedText := FTools.ValueFromIndex[i];
+        if data.Count > 0 then
+        begin
+          ToolItem := TMenuItem.Create(self);
+          ToolItem.OnClick := ClickTool;
+          MenuItem.Add(ToolItem);
+          ToolItem.Caption := FTools.Names[i];
+          Tool := TToolCommand.Create(self);
+          Tool.Command := Data[0];
+          if Data.Count > 1 then
+          begin
+            Data.Delete(0);
+            Tool.ParamStr := Data.DelimitedText;
+          end;
+          ToolItem.Tag := Integer(Tool);
+        end;
+      end;
+
+    finally
+      FreeAndNil(Data);
+    end;
+
+  end;
+  
+
 end;
 
 procedure TSqlEditorMainFrm.DisplayPeek(word: string; aSwitch: boolean);
@@ -391,7 +469,24 @@ begin
 
 end;
 
+procedure TSqlEditorMainFrm.ClearTables;
+var
+  i: Integer;
+begin
+  for i := 0 to FTables.Count - 1 do
+    FTables.Objects[i].Free;
+  FTables.Clear;
+end;
+
+procedure TSqlEditorMainFrm.ClickTool(Sender: TObject);
+var
+  Menu: TMenuItem absolute Sender;
+begin
+  TToolCommand(Menu.Tag).Go;
+end;
+
 {$IFDEF CodeComplete}
+
 procedure TSqlEditorMainFrm.CodeCExecute(Kind: SynCompletionType; Sender: TObject;
   var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
 var
@@ -559,7 +654,7 @@ end;
 
 function TSqlEditorMainFrm.CompiledSQL(aSql: string): string;
 begin
-  with TSqlGenerator.Create(FProject.Macros, FProject.Includes) do
+  with TSqlGenerator.Create(FProject.Macros, FProject.Includes, Self) do
   try
     Result := CompileSql(aSQL);
   finally
@@ -571,13 +666,12 @@ procedure TSqlEditorMainFrm.CompileTextData(aTextData: THsTextData);
 begin
   if aTextData.SqlType in [dtMacro, dtInclude] then
     exit;
-
-  Memo1.Clear;
   with TStringList.Create do
   try
     try
       Text := FGenerator.CompileSql(aTextData.SQL);
       SaveToFile(FProject.ProjectFolder + '\Compiled\'+aTextData.SqlName+'.sql');
+      Log('Saved: '+aTextData.SqlName+'.sql');
     except
       on e:exception do
       begin
@@ -653,8 +747,7 @@ var
   i: Integer;
 begin
   FreeAndNil(FProject);
-  for i := 0 to FTables.Count - 1 do
-    FTables.Objects[i].Free;
+  ClearTables;
   FreeAndNil(FTables);
 end;
 
@@ -737,6 +830,40 @@ begin
   finally
     Free;
   end;
+end;
+
+procedure TSqlEditorMainFrm.LoadTables;
+
+var
+  Ini: TIniFile;
+  I: Integer;
+
+begin
+  ClearTables;
+  if FileExists(FProject.ProjectFolder+'\Tables.Txt') then
+  begin
+    Ini := TIniFile.Create(FProject.ProjectFolder+'\Tables.Txt');
+    try
+      Ini.ReadSections(FTables);
+      FTables.CaseSensitive := False;
+
+      FHighlighter.TableNames.Assign(FTables);
+      for I := 0 to FTables.Count - 1 do
+      begin
+        FHighlighter.TableNames.Objects[i] := TStringList.Create;
+        FTables.Objects[i] := FHighlighter.TableNames.Objects[i];
+        Ini.ReadSection(FHighlighter.TableNames[i],FHighlighter.TableNames.Objects[i] as TStringList);
+      end;
+    finally
+      FreeAndNil(Ini);
+    end;
+  end;
+
+end;
+
+procedure TSqlEditorMainFrm.Log(AValue: string);
+begin
+  Memo1.Lines.Add(AValue);
 end;
 
 procedure TSqlEditorMainFrm.PageControl1Change(Sender: TObject);
@@ -957,31 +1084,14 @@ begin
 end;
 
 procedure TSqlEditorMainFrm.SetProjectFolder(const Value: string);
-var
-  Ini: TIniFile;
-  I: Integer;
 begin
   FProjectFolder := Value;
   FProject.ProjectFolder := Value;
-  if FileExistsUTF8(FProject.ProjectFolder+'\Tables.Txt') then
-  begin
-    Ini := TIniFile.Create(FProject.ProjectFolder+'\Tables.Txt');
-    try
-      Ini.ReadSections(FTables);
-      FTables.CaseSensitive := False;
-
-      FHighlighter.TableNames.Assign(FTables);
-      for I := 0 to FTables.Count - 1 do
-      begin
-        FHighlighter.TableNames.Objects[i] := TStringList.Create;
-        FTables.Objects[i] := FHighlighter.TableNames.Objects[i];
-        Ini.ReadSection(FHighlighter.TableNames[i],FHighlighter.TableNames.Objects[i] as TStringList);
-      end;
-    finally
-      FreeAndNil(Ini);
-    end;
-  end;
+  if FileExists(FProject.ProjectFolder+'\Tables.Txt') then
+  ProjectName.Text := Value;
+  LoadTables;
   RebuildTree('');
+  BuildTools;
 end;
 
 procedure TSqlEditorMainFrm.SqlMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer;
@@ -1067,5 +1177,22 @@ begin
   AllowEdit := False;
 end;
 
+
+{ TToolCommand }
+
+procedure TToolCommand.Go;
+begin
+  ShellExecute(0,'OPEN',PChar(Self.FCommand), PChar(Self.FParamStr), '', SW_SHOW);
+end;
+
+procedure TToolCommand.SetCommand(const Value: string);
+begin
+  FCommand := Value;
+end;
+
+procedure TToolCommand.SetParamStr(const Value: string);
+begin
+  FParamStr := Value;
+end;
 
 end.

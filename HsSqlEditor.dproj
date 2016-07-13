@@ -124,12 +124,6 @@
     <DelphiCompile Include="HsSqlEditor.dpr">
       <MainSource>MainSource</MainSource>
     </DelphiCompile>
-    <DCCReference Include="Hss\uHssStringList.pas" />
-    <DCCReference Include="Hss\uHssStringsCSV.pas" />
-    <DCCReference Include="Hss\uTemplate.pas" />
-    <DCCReference Include="SqlEditorMain.pas">
-      <Form>SqlEditorMainFrm</Form>
-    </DCCReference>
     <DCCReference Include="uSqlEditor.pas" />
     <DCCReference Include="uSqlGenerator.pas" />
     <DCCReference Include="uSqlProject.pas" />

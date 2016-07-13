@@ -8,51 +8,49 @@
   resources were bound to the produced executable.
 */
 
-#define SynEditTextBuffer_SListIndexOutOfBounds 65264
-#define SynEditTextBuffer_SInvalidCapacity 65265
-#define ComStrs_sTabFailClear 65266
-#define ComStrs_sTabFailDelete 65267
-#define ComStrs_sTabFailRetrieve 65268
-#define ComStrs_sTabFailGetObject 65269
-#define ComStrs_sTabFailSet 65270
-#define ComStrs_sTabFailSetObject 65271
-#define ComStrs_sTabMustBeMultiLine 65272
-#define ComStrs_sInvalidIndex 65273
-#define ComStrs_sInsertError 65274
-#define ComStrs_sPageIndexError 65275
-#define uSqlEditor_SNoSelectionAvailable 65276
-#define SynEditStrConst_SYNS_AttrFunction 65280
-#define SynEditStrConst_SYNS_AttrIdentifier 65281
-#define SynEditStrConst_SYNS_AttrNumber 65282
-#define SynEditStrConst_SYNS_AttrPLSQL 65283
-#define SynEditStrConst_SYNS_AttrReservedWord 65284
-#define SynEditStrConst_SYNS_AttrSpace 65285
-#define SynEditStrConst_SYNS_AttrSQLPlus 65286
-#define SynEditStrConst_SYNS_AttrString 65287
-#define SynEditStrConst_SYNS_AttrSymbol 65288
-#define SynEditStrConst_SYNS_AttrTableName 65289
-#define SynEditStrConst_SYNS_AttrVariable 65290
-#define SynEditStrConst_SYNS_ScrollInfoFmt 65291
-#define SynEditStrConst_SYNS_ScrollInfoFmtTop 65292
-#define SynEditStrConst_SYNS_EDuplicateShortcut 65293
-#define SynEditStrConst_SYNS_FilterSQL 65294
-#define SynEditStrConst_SYNS_LangSQL 65295
-#define Consts_SDockZoneHasNoCtl 65296
-#define Consts_SDockZoneVersionConflict 65297
-#define Consts_SMultiSelectRequired 65298
-#define Consts_SANSIEncoding 65299
-#define Consts_SASCIIEncoding 65300
-#define Consts_SUnicodeEncoding 65301
-#define Consts_SBigEndianEncoding 65302
-#define Consts_SUTF8Encoding 65303
-#define Consts_SUTF7Encoding 65304
-#define Consts_SPageControlNotSet 65305
-#define SynEditStrConst_SYNS_AttrComment 65306
-#define SynEditStrConst_SYNS_AttrConditionalComment 65307
-#define SynEditStrConst_SYNS_AttrDataType 65308
-#define SynEditStrConst_SYNS_AttrDefaultPackage 65309
-#define SynEditStrConst_SYNS_AttrDelimitedIdentifier 65310
-#define SynEditStrConst_SYNS_AttrException 65311
+#define SynEditTextBuffer_SInvalidCapacity 65264
+#define ComStrs_sTabFailClear 65265
+#define ComStrs_sTabFailDelete 65266
+#define ComStrs_sTabFailRetrieve 65267
+#define ComStrs_sTabFailGetObject 65268
+#define ComStrs_sTabFailSet 65269
+#define ComStrs_sTabFailSetObject 65270
+#define ComStrs_sTabMustBeMultiLine 65271
+#define ComStrs_sInvalidIndex 65272
+#define ComStrs_sInsertError 65273
+#define ComStrs_sPageIndexError 65274
+#define SynEditStrConst_SYNS_AttrIdentifier 65280
+#define SynEditStrConst_SYNS_AttrNumber 65281
+#define SynEditStrConst_SYNS_AttrPLSQL 65282
+#define SynEditStrConst_SYNS_AttrReservedWord 65283
+#define SynEditStrConst_SYNS_AttrSpace 65284
+#define SynEditStrConst_SYNS_AttrSQLPlus 65285
+#define SynEditStrConst_SYNS_AttrString 65286
+#define SynEditStrConst_SYNS_AttrSymbol 65287
+#define SynEditStrConst_SYNS_AttrTableName 65288
+#define SynEditStrConst_SYNS_AttrVariable 65289
+#define SynEditStrConst_SYNS_ScrollInfoFmt 65290
+#define SynEditStrConst_SYNS_ScrollInfoFmtTop 65291
+#define SynEditStrConst_SYNS_EDuplicateShortcut 65292
+#define SynEditStrConst_SYNS_FilterSQL 65293
+#define SynEditStrConst_SYNS_LangSQL 65294
+#define SynEditTextBuffer_SListIndexOutOfBounds 65295
+#define Consts_SDockZoneVersionConflict 65296
+#define Consts_SMultiSelectRequired 65297
+#define Consts_SANSIEncoding 65298
+#define Consts_SASCIIEncoding 65299
+#define Consts_SUnicodeEncoding 65300
+#define Consts_SBigEndianEncoding 65301
+#define Consts_SUTF8Encoding 65302
+#define Consts_SUTF7Encoding 65303
+#define Consts_SPageControlNotSet 65304
+#define SynEditStrConst_SYNS_AttrComment 65305
+#define SynEditStrConst_SYNS_AttrConditionalComment 65306
+#define SynEditStrConst_SYNS_AttrDataType 65307
+#define SynEditStrConst_SYNS_AttrDefaultPackage 65308
+#define SynEditStrConst_SYNS_AttrDelimitedIdentifier 65309
+#define SynEditStrConst_SYNS_AttrException 65310
+#define SynEditStrConst_SYNS_AttrFunction 65311
 #define Consts_SmkcRight 65312
 #define Consts_SmkcDown 65313
 #define Consts_SmkcIns 65314
@@ -60,15 +58,15 @@
 #define Consts_SmkcShift 65316
 #define Consts_SmkcCtrl 65317
 #define Consts_SmkcAlt 65318
-#define Consts_SInsertLineError 65319
-#define Consts_SInvalidClipFmt 65320
-#define Consts_SIconToClipboard 65321
-#define Consts_SCannotOpenClipboard 65322
-#define Consts_SInvalidMemoSize 65323
-#define Consts_SDuplicateMenus 65324
-#define Consts_SDockedCtlNeedsName 65325
-#define Consts_SDockTreeRemoveError 65326
-#define Consts_SDockZoneNotFound 65327
+#define Consts_SInvalidClipFmt 65319
+#define Consts_SIconToClipboard 65320
+#define Consts_SCannotOpenClipboard 65321
+#define Consts_SInvalidMemoSize 65322
+#define Consts_SDuplicateMenus 65323
+#define Consts_SDockedCtlNeedsName 65324
+#define Consts_SDockTreeRemoveError 65325
+#define Consts_SDockZoneNotFound 65326
+#define Consts_SDockZoneHasNoCtl 65327
 #define Consts_SMsgDlgRetry 65328
 #define Consts_SMsgDlgIgnore 65329
 #define Consts_SMsgDlgAll 65330
@@ -279,7 +277,6 @@
 #define SysConst_SRangeError 65535
 STRINGTABLE
 BEGIN
-	SynEditTextBuffer_SListIndexOutOfBounds,	"Invalid stringlist index %d"
 	SynEditTextBuffer_SInvalidCapacity,	"Stringlist capacity cannot be smaller than count"
 	ComStrs_sTabFailClear,	"Failed to clear tab control"
 	ComStrs_sTabFailDelete,	"Failed to delete tab at index %d"
@@ -291,8 +288,6 @@ BEGIN
 	ComStrs_sInvalidIndex,	"Invalid index"
 	ComStrs_sInsertError,	"Unable to insert an item"
 	ComStrs_sPageIndexError,	"%d is an invalid PageIndex value.  PageIndex must be between 0 and %d"
-	uSqlEditor_SNoSelectionAvailable,	"The is no selection available, search whole text?"
-	SynEditStrConst_SYNS_AttrFunction,	"Function"
 	SynEditStrConst_SYNS_AttrIdentifier,	"Identifier"
 	SynEditStrConst_SYNS_AttrNumber,	"Number"
 	SynEditStrConst_SYNS_AttrPLSQL,	"PL/SQL Reserved Word"
@@ -308,7 +303,7 @@ BEGIN
 	SynEditStrConst_SYNS_EDuplicateShortcut,	"Shortcut already exists"
 	SynEditStrConst_SYNS_FilterSQL,	"SQL Files (*.sql)|*.sql"
 	SynEditStrConst_SYNS_LangSQL,	"SQL"
-	Consts_SDockZoneHasNoCtl,	" - Dock zone has no control"
+	SynEditTextBuffer_SListIndexOutOfBounds,	"Invalid stringlist index %d"
 	Consts_SDockZoneVersionConflict,	"Error loading dock zone from the stream. Expecting version %d, but found %d."
 	Consts_SMultiSelectRequired,	"Multiselect mode must be on for this feature"
 	Consts_SANSIEncoding,	"ANSI"
@@ -324,6 +319,7 @@ BEGIN
 	SynEditStrConst_SYNS_AttrDefaultPackage,	"Default Packages"
 	SynEditStrConst_SYNS_AttrDelimitedIdentifier,	"Delimited Identifier"
 	SynEditStrConst_SYNS_AttrException,	"Exception"
+	SynEditStrConst_SYNS_AttrFunction,	"Function"
 	Consts_SmkcRight,	"Right"
 	Consts_SmkcDown,	"Down"
 	Consts_SmkcIns,	"Ins"
@@ -331,7 +327,6 @@ BEGIN
 	Consts_SmkcShift,	"Shift+"
 	Consts_SmkcCtrl,	"Ctrl+"
 	Consts_SmkcAlt,	"Alt+"
-	Consts_SInsertLineError,	"Unable to insert a line"
 	Consts_SInvalidClipFmt,	"Invalid clipboard format"
 	Consts_SIconToClipboard,	"Clipboard does not support Icons"
 	Consts_SCannotOpenClipboard,	"Cannot open clipboard"
@@ -340,6 +335,7 @@ BEGIN
 	Consts_SDockedCtlNeedsName,	"Docked control must have a name"
 	Consts_SDockTreeRemoveError,	"Error removing control from dock tree"
 	Consts_SDockZoneNotFound,	" - Dock zone not found"
+	Consts_SDockZoneHasNoCtl,	" - Dock zone has no control"
 	Consts_SMsgDlgRetry,	"&Retry"
 	Consts_SMsgDlgIgnore,	"&Ignore"
 	Consts_SMsgDlgAll,	"&All"
@@ -552,11 +548,11 @@ END
 
 /* c:\program files\codegear\rad studio\5.0\lib\Controls.res */
 /* x:\hss\3rdparty\SynEdit\Source\SynEdit.res */
-/* c:\program files\codegear\rad studio\5.0\lib\Buttons.res */
-/* c:\program files\codegear\rad studio\5.0\lib\ExtDlgs.res */
 /* .\SearchAndReplace\dlgSearchText.dfm */
 /* .\SearchAndReplace\dlgReplaceText.dfm */
 /* .\SearchAndReplace\dlgConfirmReplace.dfm */
-/* Z:\source\SqlPrePro\Main\SqlEditorMain.dfm */
+/* c:\program files\codegear\rad studio\5.0\lib\Buttons.res */
+/* c:\program files\codegear\rad studio\5.0\lib\ExtDlgs.res */
+/* SqlEditorMain.dfm */
 /* Z:\source\SqlPrePro\Main\HsSqlEditor.res */
 /* Z:\source\SqlPrePro\Main\HsSqlEditor.drf */

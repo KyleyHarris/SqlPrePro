@@ -20,18 +20,19 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 591
-    Top = 0
-    Height = 527
+    Top = 31
+    Height = 496
     Align = alRight
     ExplicitLeft = 736
     ExplicitTop = 24
+    ExplicitHeight = 527
   end
   object PageControl1: TPageControl
     Left = 0
-    Top = 0
+    Top = 31
     Width = 591
-    Height = 527
-    ActivePage = tsSql
+    Height = 496
+    ActivePage = tsMessage
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change
@@ -39,7 +40,7 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
       Caption = 'SQL'
       object Splitter2: TSplitter
         Left = 0
-        Top = 373
+        Top = 342
         Width = 583
         Height = 3
         Cursor = crVSplit
@@ -49,7 +50,7 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
       end
       object PreviewPanel: TPanel
         Left = 0
-        Top = 376
+        Top = 345
         Width = 583
         Height = 123
         Align = alBottom
@@ -77,23 +78,15 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
     object tsCompiled: TTabSheet
       Caption = 'Compiled Sql'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object tsMessage: TTabSheet
       Caption = 'Messages'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Memo1: TMemo
         Left = 0
         Top = 0
         Width = 583
-        Height = 499
+        Height = 468
         Align = alClient
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
@@ -108,9 +101,9 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
   end
   object Panel1: TPanel
     Left = 594
-    Top = 0
+    Top = 31
     Width = 350
-    Height = 527
+    Height = 496
     Align = alRight
     Caption = 'Panel1'
     TabOrder = 1
@@ -118,7 +111,7 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
       Left = 1
       Top = 41
       Width = 348
-      Height = 485
+      Height = 454
       ActivePage = tabDataAll
       Align = alClient
       TabOrder = 0
@@ -130,7 +123,7 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
           Left = 0
           Top = 0
           Width = 340
-          Height = 457
+          Height = 426
           Align = alClient
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
@@ -155,15 +148,11 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
       object tabDataRelated: TTabSheet
         Caption = 'Related'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object ViewRelatedItems: TTreeView
           Left = 0
           Top = 38
           Width = 340
-          Height = 419
+          Height = 388
           Align = alClient
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
@@ -231,6 +220,30 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
       end
     end
   end
+  object Panel5: TPanel
+    Left = 0
+    Top = 0
+    Width = 944
+    Height = 31
+    Align = alTop
+    TabOrder = 2
+    object Label2: TLabel
+      Left = 8
+      Top = 8
+      Width = 34
+      Height = 13
+      Caption = 'Project'
+    end
+    object ProjectName: TEdit
+      Left = 48
+      Top = 4
+      Width = 546
+      Height = 21
+      ReadOnly = True
+      TabOrder = 0
+      Text = 'ProjectName'
+    end
+  end
   object ActionList1: TActionList
     Left = 464
     Top = 264
@@ -254,6 +267,7 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
     end
     object actCompile: TAction
       Caption = 'Compile'
+      ShortCut = 16504
       OnExecute = actCompileExecute
     end
   end
@@ -402,8 +416,8 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
   object Timer1: TTimer
     Interval = 250
     OnTimer = Timer1Timer
-    Left = 472
-    Top = 272
+    Left = 384
+    Top = 280
   end
   object MainMenu1: TMainMenu
     Left = 232
