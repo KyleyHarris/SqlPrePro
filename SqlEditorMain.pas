@@ -189,17 +189,18 @@ implementation
 uses
 {$IFDEF FPC}
   LazFileUtils,
+  Process,
 {$ELSE}
   uFileUtils,
   Math,
+  ShellAPI,
 {$ENDIF}
-  IniFiles,
-  ShellAPI;
+  IniFiles;
 
-{$IFnDEF FPC}
-  {$R *.dfm}
-{$ELSE}
+{$IFDEF FPC}
   {$R *.lfm}
+{$ELSE}
+  {$R *.dfm}
 {$ENDIF}
 
 procedure TSqlEditorMainFrm.actCompileExecute(Sender: TObject);
@@ -1181,8 +1182,21 @@ end;
 { TToolCommand }
 
 procedure TToolCommand.Go;
+{$IFDEF FPC}
+var
+  ExternalProcess: TProcess;
 begin
+  ExternalProcess := TProcess.Create(nil);
+  try
+    ExternalProcess.Executable:= FCommand;
+    ExternalProcess.Parameters.Add(FParamStr);
+    ExternalProcess.Execute;
+  finally
+    ExternalProcess.Free;
+  end;
+{$ELSE}
   ShellExecute(0,'OPEN',PChar(Self.FCommand), PChar(Self.FParamStr), '', SW_SHOW);
+{$ENDIF}
 end;
 
 procedure TToolCommand.SetCommand(const Value: string);

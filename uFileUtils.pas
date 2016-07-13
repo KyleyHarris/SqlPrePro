@@ -8,7 +8,7 @@ uses
     procedure DeleteFileUTF8(const AFileName : String);
     function FileExistsUTF8(const AFileName: String) : Boolean;
     function FindFirstUTF8(const APath: string; AAttribute: Integer; var ARecord: TSearchRec): Integer;
-    function DirectoryExistsUTF8(const APath: string; AFollowLink: Boolean = True): Boolean;
+    function DirectoryExistsUTF8(const APath: string): Boolean;
     function FindNextUTF8(var ARecord: TSearchRec): Integer;
     procedure FindCloseUTF8(var ARecord: TSearchRec);
 
@@ -29,7 +29,7 @@ begin
   Result := FindFirst(APath,AAttribute,ARecord);
 end;
 
-function DirectoryExistsUTF8(const APath: string; AFollowLink: Boolean): Boolean;
+function DirectoryExistsUTF8(const APath: string): Boolean;
 begin
   Result := DirectoryExists(APath);
 end;
