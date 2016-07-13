@@ -29,6 +29,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
+        <CommandLineParams Value="../SampleProject"/>
       </local>
     </RunParams>
     <RequiredPackages Count="2">
