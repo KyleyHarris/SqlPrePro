@@ -41,7 +41,7 @@ const
 
 type
 
-  TToolCommand = class(TBasicAction)
+  TToolCommand = class(TCustomAction)
   private
     FCommand: string;
     FParamStr: string;
@@ -305,6 +305,7 @@ begin
           ToolItem := TMenuItem.Create(self);
           MenuItem.Add(ToolItem);
           Tool := TToolCommand.Create(ToolItem);
+          Tool.Caption := FTools.Names[i];
           Tool.Command := Data[0];
           if Data.Count > 1 then
           begin
@@ -313,7 +314,7 @@ begin
           end;
 
           ToolItem.Action := Tool;
-          ToolItem.Caption := FTools.Names[i];
+
         end;
       end;
 
@@ -1179,9 +1180,9 @@ var
   ExternalProcess: TProcess;
 {$ENDIF}
 begin
-  Result := inherited;
+  Result := inherited Execute;
 
-  if Result then
+  if not Result then
   begin
 {$IFDEF FPC}
     ExternalProcess := TProcess.Create(nil);
