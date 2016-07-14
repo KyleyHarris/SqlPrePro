@@ -38,6 +38,10 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
     OnChange = PageControl1Change
     object tsSql: TTabSheet
       Caption = 'SQL'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Splitter2: TSplitter
         Left = 0
         Top = 342
@@ -78,10 +82,18 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
     object tsCompiled: TTabSheet
       Caption = 'Compiled Sql'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
     object tsMessage: TTabSheet
       Caption = 'Messages'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Memo1: TMemo
         Left = 0
         Top = 0
@@ -119,6 +131,10 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
       object tabDataAll: TTabSheet
         Caption = 'All Items'
         ImageIndex = 5
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object ViewAllItems: TTreeView
           Left = 0
           Top = 0
@@ -148,6 +164,10 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
       object tabDataRelated: TTabSheet
         Caption = 'Related'
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object ViewRelatedItems: TTreeView
           Left = 0
           Top = 38
