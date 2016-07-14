@@ -56,7 +56,7 @@ uses
   ExtCtrls;
 
 type
-  TConfirm ReplaceDialog = class(TForm)
+  TConfirmReplaceDialog = class(TForm)
     btnReplace: TButton;
     lblConfirmation: TLabel;
     btnSkip: TButton;
