@@ -41,15 +41,15 @@ const
 
 type
 
-  TToolCommand = class(TComponent)
+  TToolCommand = class(TBasicAction)
   private
     FCommand: string;
     FParamStr: string;
     procedure SetCommand(const Value: string);
     procedure SetParamStr(const Value: string);
-  published
   public
-    procedure Go;
+    function Execute: Boolean; override;
+
     property Command: string read FCommand write SetCommand;
     property ParamStr: string read FParamStr write SetParamStr;
   end;
@@ -156,7 +156,6 @@ type
     function GetActiveFolder: string;
     function GetActiveItem: THsTextData;
     procedure BuildTools;
-    procedure ClickTool(Sender: TObject);
 
     procedure DisplayPeek(word: string; aSwitch: boolean=False);
 
@@ -304,17 +303,17 @@ begin
         if data.Count > 0 then
         begin
           ToolItem := TMenuItem.Create(self);
-          ToolItem.OnClick := ClickTool;
           MenuItem.Add(ToolItem);
-          ToolItem.Caption := FTools.Names[i];
-          Tool := TToolCommand.Create(self);
+          Tool := TToolCommand.Create(ToolItem);
           Tool.Command := Data[0];
           if Data.Count > 1 then
           begin
             Data.Delete(0);
             Tool.ParamStr := Data.DelimitedText;
           end;
-          ToolItem.Tag := Integer(Tool);
+
+          ToolItem.Action := Tool;
+          ToolItem.Caption := FTools.Names[i];
         end;
       end;
 
@@ -477,13 +476,6 @@ begin
   for i := 0 to FTables.Count - 1 do
     FTables.Objects[i].Free;
   FTables.Clear;
-end;
-
-procedure TSqlEditorMainFrm.ClickTool(Sender: TObject);
-var
-  Menu: TMenuItem absolute Sender;
-begin
-  TToolCommand(Menu.Tag).Go;
 end;
 
 {$IFDEF CodeComplete}
@@ -1181,22 +1173,29 @@ end;
 
 { TToolCommand }
 
-procedure TToolCommand.Go;
+function TToolCommand.Execute: Boolean;
 {$IFDEF FPC}
 var
   ExternalProcess: TProcess;
-begin
-  ExternalProcess := TProcess.Create(nil);
-  try
-    ExternalProcess.Executable:= FCommand;
-    ExternalProcess.Parameters.Add(FParamStr);
-    ExternalProcess.Execute;
-  finally
-    ExternalProcess.Free;
-  end;
-{$ELSE}
-  ShellExecute(0,'OPEN',PChar(Self.FCommand), PChar(Self.FParamStr), '', SW_SHOW);
 {$ENDIF}
+begin
+  Result := inherited;
+
+  if Result then
+  begin
+{$IFDEF FPC}
+    ExternalProcess := TProcess.Create(nil);
+    try
+      ExternalProcess.Executable:= FCommand;
+      ExternalProcess.Parameters.Add(FParamStr);
+      ExternalProcess.Execute;
+    finally
+      ExternalProcess.Free;
+    end;
+{$ELSE}
+    ShellExecute(0,'OPEN',PChar(Self.FCommand), PChar(Self.FParamStr), '', SW_SHOW);
+{$ENDIF}
+  end;
 end;
 
 procedure TToolCommand.SetCommand(const Value: string);
