@@ -7,7 +7,7 @@ uses
 
 type
 
-  TTextDataType = (dtNone,dtProc, dtInclude, dtMacro, dtFunc, dtView);
+  TTextDataType = (dtCompiled ,dtProc, dtInclude, dtMacro, dtFunc, dtView);
 
   THsTextData = class(TCollectionItem)
   private
@@ -80,7 +80,7 @@ begin
       Text := SQL;
       SqlName := ActiveItemName;
       if SqlName = '[UNKNOWN]' then
-        raise Exception.Create('Cannot Save SQL without correct syntax and name'#13#10+sql);
+        raise Exception.Create('Cannot Save SQL without correct syntax and name.' + sLineBreak + sql);
       Insert(0,SQLName);
       FFileName := Folder + '\' + SqlName + '.sql';
       SaveToFile(FileName);

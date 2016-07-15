@@ -111,7 +111,7 @@ var
       s:string;
     begin
       AResult := Trim(AResult);
-      i := Pos(#13#10,AResult);
+      i := Pos(sLineBreak,AResult);
       if i = -1 then
         LoadDefaultParams else
       if Pos('MACRO ',uppercase(AResult))=1 then
@@ -263,16 +263,26 @@ var
   end;
 
   function Content(aString: string): string;
+  var
+    List : TStrings;
+    BreakLength, LastPos: Integer;
   begin
-    with TStringList.Create do
-    try
-      Text := aString;
-      Delete(0);
-      Result := Text;
-      if Copy(Result, Length(Result)-1,2)=#13#10 then
-        System.Delete(Result,Length(Result)-1,2)
-    finally
-      Free;
+    Result := '';
+    if (aString <> '') then
+    begin
+      List := TStringList.Create;
+      try
+        List.Text := aString;
+        List.Delete(0);
+        Result := List.Text;
+
+        BreakLength := Length(sLineBreak);
+        LastPos := Length(Result)-BreakLength + 1;
+        if Copy(Result, LastPos,BreakLength)=sLineBreak then
+          System.Delete(Result,LastPos,BreakLength);
+      finally
+        List.Free;
+      end;
     end;
   end;
   
@@ -536,7 +546,7 @@ begin
       on E:Exception do
       begin
         result := 'ERROR';
-        raise Exception.Create('Stack Error'#13#10+GlobalStack.Text);
+        raise Exception.Create('Stack Error' + sLineBreak + GlobalStack.Text);
       end;
     end;
   finally
