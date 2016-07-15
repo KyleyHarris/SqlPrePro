@@ -28,7 +28,7 @@ uses
   uTextData,
   uSqlGenerator,
 // synedit code
-{$IFDEF CodeComplete}
+{$IFNDEF FPC}
   SynCompletionProposal,
 {$ENDIF}
 // Others
@@ -123,18 +123,15 @@ type
     FPreviewSql: TSqlEditor;
     FProject: TSqlProject;
     FCompiledSql: TSqlEditor;
-    {$IFDEF CodeComplete}
-    FCodeC: TSynCompletionProposal;
-    {$endif}
     FHighlighter: TSynSQLSyn;
     FProjectFolder: string;
     FTables: TStringList;
-    {$ifdef CodeComplete}
+{$IFNDEF FPC}
+    FCodeC: TSynCompletionProposal;
     procedure CodeCExecute(Kind: SynCompletionType; Sender: TObject;
       var CurrentInput: string; var x, y: Integer;
       var CanExecute: Boolean);
-    {$Endif}
-
+{$Endif}
     procedure ClearTables;
     procedure LoadTables;
     procedure Log(AValue: string);
@@ -145,8 +142,7 @@ type
     procedure DoEnterSql(Sender: TObject);
     procedure RebuildRelated(aTextData: THsTextData);
     procedure RebuildTree(aPattern: string);
-    procedure SqlMouseWheel(Sender: TObject; Shift: TShiftState;
-      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+    procedure SqlMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure CompileTextData(aTextData: THsTextData);
     function CompiledSQL(aSql: string): string;
     procedure DoSqlEdit(Sender: TObject);
@@ -156,6 +152,7 @@ type
     function GetActiveFolder: string;
     function GetActiveItem: THsTextData;
     procedure BuildTools;
+    function FolderForCompiledSQL : String;
 
     procedure DisplayPeek(word: string; aSwitch: boolean=False);
 
@@ -202,12 +199,17 @@ uses
   {$R *.dfm}
 {$ENDIF}
 
+const
+  TABLE_FILE = 'tables.txt';
+
+
+
 procedure TSqlEditorMainFrm.actCompileExecute(Sender: TObject);
 begin
   FGenerator := TSqlGenerator.Create(FProject.Macros, FProject.Includes, Self);
   try
     Memo1.Clear;
-    Log('Compiling To:' + FProject.ProjectFolder + '\Compiled');
+    Log(Format('Compiling To: %s',[FolderForCompiledSQL]));
     FProject.IterateAll(CompileTextData);
     PageControl1.ActivePage := tsMessage;
     ShowMessage('Compiled');
@@ -285,8 +287,7 @@ var
   i: Integer;
 begin
   FreeAndNil(FTools);
-  fileName := ProjectFolder+'\tools.txt';
-
+  fileName := ProjectFolder + DirectorySeparator + 'tools.txt';
   if FileExistsUTF8(fileName) then
   begin
     MenuItem := TMenuItem.Create(self);
@@ -327,12 +328,16 @@ begin
 
 end;
 
+function TSqlEditorMainFrm.FolderForCompiledSQL: String;
+begin
+  Result := FProject.ProjectFolder + DirectorySeparator + 'Compiled';
+end;
+
 procedure TSqlEditorMainFrm.DisplayPeek(word: string; aSwitch: boolean);
 var
   FoundItem: THsTextData;
   SqlType: TTextDataType;
-  Text: string;
-
+  List: TStrings;
   i: Integer;
 begin
   FPreviewSql.Text := '';
@@ -353,8 +358,8 @@ begin
     i := FTables.IndexOf(LowerCase(word));
     if i > -1 then
     begin
-      Text := 'TABLE '+ FTables[i]+#13#10+TStringList(FTables.Objects[i]).Text;
-      FPreviewSql.Text := Text;
+      List := TStrings(FTables.Objects[i]);
+      FPreviewSql.Text := Format('TABLE %s',[FTables[i]]) + sLineBreak + List.Text;
     end;
   end;
 
@@ -387,7 +392,7 @@ end;
 
 procedure TSqlEditorMainFrm.EnableCodeComplete;
 begin
-{$ifdef CodeComplete}
+{$IFNDEF FPC}
   FCodeC := TSynCompletionProposal.Create(Self);
   FCodeC.OnExecute := CodeCExecute;
 
@@ -397,11 +402,11 @@ begin
   FCodeC.EndOfTokenChr := '()[]. ';
   FCodeC.TriggerChars := '#.@_';
   FCodeC.TimerInterval := 200;
-
 {$Endif}
 end;
 
-procedure TSqlEditorMainFrm.ParameterList(AText:string;AParams: TStrings;ATables:TStrings;ATableAlias:TStrings);
+procedure TSqlEditorMainFrm.ParameterList(AText: string; AParams, ATables,
+  ATableAlias: TStrings);
 var
   FSource:string;
   Token:string;
@@ -479,7 +484,7 @@ begin
   FTables.Clear;
 end;
 
-{$IFDEF CodeComplete}
+{$IFNDEF FPC}
 
 procedure TSqlEditorMainFrm.CodeCExecute(Kind: SynCompletionType; Sender: TObject;
   var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
@@ -657,25 +662,32 @@ begin
 end;
 
 procedure TSqlEditorMainFrm.CompileTextData(aTextData: THsTextData);
+var
+  FileName : String;
+  Lines : TStrings;
 begin
   if aTextData.SqlType in [dtMacro, dtInclude] then
     exit;
-  with TStringList.Create do
+
+  Lines := TStringList.Create;
   try
     try
-      Text := FGenerator.CompileSql(aTextData.SQL);
-      SaveToFile(FProject.ProjectFolder + '\Compiled\'+aTextData.SqlName+'.sql');
-      Log('Saved: '+aTextData.SqlName+'.sql');
+      Lines.Text := FGenerator.CompileSql(aTextData.SQL);
+      FileName := FolderForCompiledSQL + DirectorySeparator + Format('%s.sql',[aTextData.SqlName]);
+      Lines.SaveToFile(FileName);
+      Log(Format('Saved: %s.sql',[aTextData.SqlName]));
     except
       on e:exception do
       begin
-        Text := 'ERROR Processing '+aTextData.SQLName+#13#10+e.Message+#13#10+StringOfChar('-',40)+#13#10;
-        Memo1.Lines.Add(Text);
+        Memo1.Lines.Add(Format('ERROR Processing %s',[aTextData.SQLName]));
+        Memo1.Lines.Add(e.Message);
+        Memo1.Lines.Add(StringOfChar('-',40));
+        Memo1.Lines.Add('');
         PageControl1.ActivePage := tsMessage;
       end;
     end;
   finally
-    Free;
+    Lines.Free;
   end;
 end;
 
@@ -737,8 +749,6 @@ begin
 end;
 
 procedure TSqlEditorMainFrm.FormDestroy(Sender: TObject);
-var
-  i: Integer;
 begin
   FreeAndNil(FProject);
   ClearTables;
@@ -766,19 +776,18 @@ var
   i: TTextDataType;
 begin
   Node := ActiveHeaderNode;
-  if Node = nil then
-  begin
-    Result := dtNone;
-    exit;
-  end;
+  if Node <> nil then
   begin
     for I := Low(Titles) to High(Titles) do
+    begin
       if SameText(Titles[i], Node.Text) then
       begin
         Result := i;
         exit;
       end;
+    end;
   end;
+
   Result := dtNone;
 end;
 
@@ -831,26 +840,29 @@ procedure TSqlEditorMainFrm.LoadTables;
 var
   Ini: TIniFile;
   I: Integer;
-
+  FileName : String;
 begin
+  FHighlighter.TableNames.Clear;
   ClearTables;
-  if FileExists(FProject.ProjectFolder+'\Tables.Txt') then
+
+  FileName := FProject.ProjectFolder + DirectorySeparator + TABLE_FILE;
+  if FileExists(FileName) then
   begin
-    Ini := TIniFile.Create(FProject.ProjectFolder+'\Tables.Txt');
+    Ini := TIniFile.Create(FileName);
     try
       Ini.ReadSections(FTables);
       FTables.CaseSensitive := False;
 
-      FHighlighter.TableNames.Assign(FTables);
       for I := 0 to FTables.Count - 1 do
       begin
-        FHighlighter.TableNames.Objects[i] := TStringList.Create;
-        FTables.Objects[i] := FHighlighter.TableNames.Objects[i];
-        Ini.ReadSection(FHighlighter.TableNames[i],FHighlighter.TableNames.Objects[i] as TStringList);
+        FTables.Objects[i] := TStringList.Create;
+        Ini.ReadSection(FTables[i],TStrings(FTables.Objects[i]));
       end;
     finally
       FreeAndNil(Ini);
     end;
+
+    FHighlighter.TableNames.AddStrings(FTables);
   end;
 
 end;
@@ -872,7 +884,7 @@ begin
         FCompiledSql.Text := CompiledSQL(ActiveItem.SQL);
       except
         on E:Exception do
-          FCompiledSql.Text := 'ERROR:'#13#10 + e.Message;
+          FCompiledSql.Text := 'ERROR:' + sLineBreak + e.Message;
       end;
     end;
   end;
@@ -1078,18 +1090,27 @@ begin
 end;
 
 procedure TSqlEditorMainFrm.SetProjectFolder(const Value: string);
+var
+  FileName : String;
 begin
   FProjectFolder := Value;
-  FProject.ProjectFolder := Value;
-  if FileExists(FProject.ProjectFolder+'\Tables.Txt') then
-  ProjectName.Text := Value;
-  LoadTables;
+{$IFDEF FPC}
+  DoDirSeparators(FProjectFolder);
+{$ENDIF}
+  FProject.ProjectFolder := FProjectFolder;
+  ProjectName.Text := FProjectFolder;
+
+  FileName := FProjectFolder + DirectorySeparator + TABLE_FILE;
+  if FileExists(FileName) then
+  begin
+    LoadTables;
+  end;
+
   RebuildTree('');
   BuildTools;
 end;
 
-procedure TSqlEditorMainFrm.SqlMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer;
-  MousePos: TPoint; var Handled: Boolean);
+procedure TSqlEditorMainFrm.SqlMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
   if Shift = [ssCtrl] then
   begin
@@ -1165,8 +1186,7 @@ begin
   end;
 end;
 
-procedure TSqlEditorMainFrm.ViewRelatedItemsEditing(Sender: TObject; Node: TTreeNode;
-  var AllowEdit: Boolean);
+procedure TSqlEditorMainFrm.ViewRelatedItemsEditing(Sender: TObject; Node: TTreeNode; var AllowEdit: Boolean);
 begin
   AllowEdit := False;
 end;

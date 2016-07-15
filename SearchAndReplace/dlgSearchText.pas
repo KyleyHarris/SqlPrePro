@@ -145,7 +145,7 @@ begin
     if i >= 10 then
       break;
     if i > 0 then
-      Result := Result + #13#10;
+      Result := Result + sLineBreak;
     Result := Result + cbSearchText.Items[i];
   end;
 end;

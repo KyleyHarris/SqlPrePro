@@ -59,6 +59,9 @@ uses
 {$ENDIF}
   Masks;
 
+const
+  DataTypeToFolderName : array[TTextDataType] of string = ('','Proc','Include','Macro','Func','View');
+
 { TSqlProject }
 
 procedure TSqlProject.AfterConstruction;
@@ -83,14 +86,7 @@ end;
 
 function TSqlProject.GetFolder(aType: TTextDataType): string;
 begin
-  case aType of
-    dtNone: Result := Format('%s\%s',[ProjectFolder, 'Compiled']);
-    dtProc: Result := Format('%s\%s',[ProjectFolder, 'Proc']);
-    dtInclude: Result := Format('%s\%s',[ProjectFolder, 'Include']);
-    dtMacro: Result := Format('%s\%s',[ProjectFolder, 'Macro']);
-    dtFunc: Result := Format('%s\%s',[ProjectFolder, 'Func']);
-    dtView: Result := Format('%s\%s',[ProjectFolder, 'View']);
-  end;
+  Result := ProjectFolder + DirectorySeparator + DataTypeToFolderName[aType];
 end;
 
 function TSqlProject.GetModified: Boolean;
@@ -127,7 +123,7 @@ var
   List: TTextDatas;
   i: Integer;
 begin
-  for dt :=Succ(dtNone) to High(TTextDataType) do
+  for dt := Succ(dtNone) to High(TTextDataType) do
   begin
     List := SqlList[dt];
     for i := 0 to List.Count -1 do
@@ -140,72 +136,80 @@ end;
 
 class procedure TSqlProject.AddQuickFind(AFileName, APath: string;  AResults: TStrings; ASearchSubFolders: Boolean);
 
-  procedure Iterate(ABrowsePath:string);
+  procedure Iterate(const ABrowsePath:string; const AFolderPrefix: String);
   var
     S:TSearchRec;
     Dirs:TStringList;
     i:integer;
+    FileName : String;
   begin
     Dirs := TStringList.Create;
     try
-      if FindFirstUTF8(ABrowsePath+'\*.*',faAnyFile,s) = 0 then
+      if FindFirstUTF8(ABrowsePath + DirectorySeparator + '*.*',faAnyFile,s) = 0 then
       try
         repeat
-          if DirectoryExistsUTF8(ABrowsePath+'\'+s.Name) then
+          FileName := ABrowsePath + DirectorySeparator + s.Name;
+          if DirectoryExistsUTF8(FileName) then
           begin
-            if (Pos( '.\',s.name)=0) and (s.Name <> '.') and (s.Name <> '..') then
-              Dirs.Add(ABrowsePath+'\'+s.Name);
-          end else
-          if  MatchesMask(s.Name,aFileName) then
+            if (Pos(AFolderPrefix,s.name)=0) and (s.Name <> '.') and (s.Name <> '..') then
+              Dirs.Add(FileName);
+          end
+          else
           begin
-            AResults.Add(lowercase(ABrowsePath+'\'+s.Name));
+            if MatchesMask(s.Name,aFileName) then
+            begin
+              AResults.Add(FileName);
+            end;
           end;
         until (FindNextUTF8(s) <> 0) ;
-
-        if ASearchSubfolders  then
-          for i := 0 to Dirs.Count -1 do
-           Iterate(Dirs[i]);
-
       finally
-        FindCloseUTF8(s); { *Converted from FindClose* }
+        FindCloseUTF8(s);
+      end;
+
+      if ASearchSubfolders  then
+      begin
+        for i := 0 to Dirs.Count -1 do
+         Iterate(Dirs[i],AFolderPrefix);
       end;
     finally
       FreeAndNil(Dirs);
     end;
-
   end;
+
 begin
-  Iterate(APath);
+  Iterate(APath, '.' + DirectorySeparator);
 end;
 
 
 procedure TSqlProject.LoadProject;
+const
+  SQL_FILE = '*.sql';
 var
   FileList: TStringList;
 begin
   FileList := TStringList.Create;
   try
-    AddQuickFind('*.sql', Folder[dtMacro], FileList);
+    AddQuickFind(SQL_FILE, Folder[dtMacro], FileList);
     FMacros.Clear;
     AddFilesToTextData(FileList, FMacros, dtMacro);
 
     FileList.Clear;
-    AddQuickFind('*.sql', Folder[dtInclude], FileList);
+    AddQuickFind(SQL_FILE, Folder[dtInclude], FileList);
     FIncludes.Clear;
     AddFilesToTextData(FileList, FIncludes, dtInclude);
 
     FileList.Clear;
-    AddQuickFind('*.sql', Folder[dtProc], FileList);
+    AddQuickFind(SQL_FILE, Folder[dtProc], FileList);
     FProcs.Clear;
     AddFilesToTextData(FileList, FProcs, dtProc);
 
     FileList.Clear;
-    AddQuickFind('*.sql', Folder[dtView], FileList);
+    AddQuickFind(SQL_FILE, Folder[dtView], FileList);
     FViews.Clear;
     AddFilesToTextData(FileList, FViews, dtView);
 
     FileList.Clear;
-    AddQuickFind('*.sql', Folder[dtFunc], FileList);
+    AddQuickFind(SQL_FILE, Folder[dtFunc], FileList);
     FViews.Clear;
     AddFilesToTextData(FileList, FFuncs, dtFunc);
 
@@ -236,7 +240,7 @@ var
   i: Integer;
 begin
 
-  for dt :=Succ(dtNone) to High(TTextDataType) do
+  for dt := Succ(dtNone) to High(TTextDataType) do
   begin
     List := SqlList[dt];
     for i := 0 to List.Count -1 do
@@ -263,7 +267,7 @@ var
 begin
   Result := False;
 
-  for dt :=Succ(dtNone) to High(TTextDataType) do
+  for dt := Succ(dtNone) to High(TTextDataType) do
   begin
     List := SqlList[dt];
     for i := 0 to List.Count -1 do
@@ -287,7 +291,7 @@ var
 begin
   Result := False;
 
-  for dt :=Succ(dtNone) to High(TTextDataType) do
+  for dt := Succ(dtNone) to High(TTextDataType) do
   begin
     List := SqlList[dt];
     for i := 0 to List.Count -1 do
