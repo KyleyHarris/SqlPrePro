@@ -7,7 +7,7 @@ uses
 
 type
 
-  TTextDataType = (dtCompiled ,dtProc, dtInclude, dtMacro, dtFunc, dtView);
+  TTextDataType = (dtNone, dtProc, dtInclude, dtMacro, dtFunc, dtView);
 
   THsTextData = class(TCollectionItem)
   private

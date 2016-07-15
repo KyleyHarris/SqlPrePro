@@ -60,7 +60,7 @@ uses
   Masks;
 
 const
-  DataTypeToFolderName : array[TTextDataType] of string = ('Compiled','Proc','Include','Macro','Func','View');
+  DataTypeToFolderName : array[TTextDataType] of string = ('','Proc','Include','Macro','Func','View');
 
 { TSqlProject }
 
@@ -94,7 +94,7 @@ var
   dt: TTextDataType;
 begin
   Result := False;
-  for dt := Succ(dtCompiled) to High(TTextDataType) do
+  for dt := Succ(dtNone) to High(TTextDataType) do
   begin
     if SqlList[dt].IsModified then
     begin
@@ -107,7 +107,7 @@ end;
 function TSqlProject.GetSqlList(aType: TTextDataType): TTextDatas;
 begin
   case atype of
-    dtCompiled: Result := nil ;
+    dtNone: Result := nil ;
     dtProc: Result := Procs;
     dtInclude: Result := Includes;
     dtMacro: Result := Macros;
@@ -123,7 +123,7 @@ var
   List: TTextDatas;
   i: Integer;
 begin
-  for dt := Succ(dtCompiled) to High(TTextDataType) do
+  for dt := Succ(dtNone) to High(TTextDataType) do
   begin
     List := SqlList[dt];
     for i := 0 to List.Count -1 do
@@ -240,7 +240,7 @@ var
   i: Integer;
 begin
 
-  for dt := Succ(dtCompiled) to High(TTextDataType) do
+  for dt := Succ(dtNone) to High(TTextDataType) do
   begin
     List := SqlList[dt];
     for i := 0 to List.Count -1 do
@@ -267,7 +267,7 @@ var
 begin
   Result := False;
 
-  for dt := Succ(dtCompiled) to High(TTextDataType) do
+  for dt := Succ(dtNone) to High(TTextDataType) do
   begin
     List := SqlList[dt];
     for i := 0 to List.Count -1 do
@@ -291,7 +291,7 @@ var
 begin
   Result := False;
 
-  for dt := Succ(dtCompiled) to High(TTextDataType) do
+  for dt := Succ(dtNone) to High(TTextDataType) do
   begin
     List := SqlList[dt];
     for i := 0 to List.Count -1 do

@@ -152,6 +152,7 @@ type
     function GetActiveFolder: string;
     function GetActiveItem: THsTextData;
     procedure BuildTools;
+    function FolderForCompiledSQL : String;
 
     procedure DisplayPeek(word: string; aSwitch: boolean=False);
 
@@ -201,12 +202,14 @@ uses
 const
   TABLE_FILE = 'tables.txt';
 
+
+
 procedure TSqlEditorMainFrm.actCompileExecute(Sender: TObject);
 begin
   FGenerator := TSqlGenerator.Create(FProject.Macros, FProject.Includes, Self);
   try
     Memo1.Clear;
-    Log('Compiling To: ' + FProject.ProjectFolder + DirectorySeparator + 'Compiled');
+    Log(Format('Compiling To: %s',[FolderForCompiledSQL]));
     FProject.IterateAll(CompileTextData);
     PageControl1.ActivePage := tsMessage;
     ShowMessage('Compiled');
@@ -229,7 +232,7 @@ end;
 
 procedure TSqlEditorMainFrm.actNewUpdate(Sender: TObject);
 begin
-  actNew.Enabled := ActiveDataType <> dtCompiled;
+  actNew.Enabled := ActiveDataType <> dtNone;
 end;
 
 procedure TSqlEditorMainFrm.actSaveAllExecute(Sender: TObject);
@@ -324,6 +327,11 @@ begin
 
 end;
 
+function TSqlEditorMainFrm.FolderForCompiledSQL: String;
+begin
+  Result := FProject.ProjectFolder + DirectorySeparator + 'Compiled';
+end;
+
 procedure TSqlEditorMainFrm.DisplayPeek(word: string; aSwitch: boolean);
 var
   FoundItem: THsTextData;
@@ -396,7 +404,8 @@ begin
 {$Endif}
 end;
 
-procedure TSqlEditorMainFrm.ParameterList(AText:string;AParams: TStrings;ATables:TStrings;ATableAlias:TStrings);
+procedure TSqlEditorMainFrm.ParameterList(AText: string; AParams, ATables,
+  ATableAlias: TStrings);
 var
   FSource:string;
   Token:string;
@@ -663,7 +672,7 @@ begin
   try
     try
       Lines.Text := FGenerator.CompileSql(aTextData.SQL);
-      FileName := FProject.Folder[dtCompiled] + DirectorySeparator + Format('%s.sql',[aTextData.SqlName]);
+      FileName := FolderForCompiledSQL + DirectorySeparator + Format('%s.sql',[aTextData.SqlName]);
       Lines.SaveToFile(FileName);
       Log(Format('Saved: %s.sql',[aTextData.SqlName]));
     except
@@ -778,7 +787,7 @@ begin
     end;
   end;
 
-  Result := dtCompiled;
+  Result := dtNone;
 end;
 
 function TSqlEditorMainFrm.GetActiveFolder: string;
@@ -947,7 +956,7 @@ begin
         if FProject.TextDataByName(Token, FoundItem, SqlType) then
         begin
           case SqlType of
-            dtCompiled: ;
+            dtNone: ;
             dtProc: AddChild(NodeProcs, FoundItem);
             dtInclude:AddChild(NodeIncludes, FoundItem);
             dtMacro: AddChild(NodeMacros, FoundItem);
@@ -998,7 +1007,7 @@ begin
   FirstNode := nil;
   aPattern := LowerCase(aPattern);
 
-  for dt := Succ(dtCompiled) to High(TTextDataType) do
+  for dt := Succ(dtNone) to High(TTextDataType) do
   begin
     List := FProject.SqlList[dt];
     Master := ViewAllItems.Items.AddChild(nil, Titles[dt]);
@@ -1088,14 +1097,14 @@ begin
   DoDirSeparators(FProjectFolder);
 {$ENDIF}
   FProject.ProjectFolder := FProjectFolder;
+  ProjectName.Text := FProjectFolder;
 
   FileName := FProjectFolder + DirectorySeparator + TABLE_FILE;
   if FileExists(FileName) then
   begin
-    ProjectName.Text := FProjectFolder;
+    LoadTables;
   end;
 
-  LoadTables;
   RebuildTree('');
   BuildTools;
 end;
