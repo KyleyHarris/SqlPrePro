@@ -6,18 +6,15 @@ uses
   SysUtils,
   Classes,
   uTextData;
+
 type
 
   TTextDataMethod = procedure(aTextData: THsTextData) of object;
 
   TSqlProject = class(TObject)
   private
-    FIncludes: TTextDatas;
-    FMacros: TTextDatas;
-    FFuncs: TTextDatas;
-    FProcs: TTextDatas;
-    FViews: TTextDatas;
     FProjectFolder: string;
+    FTextDatas:array[TTextDataType] of TTextDatas;
     procedure SetProjectFolder(const Value: string);
     function GetFolder(aType: TTextDataType): string;
     function GetSqlList(aType: TTextDataType): TTextDatas;
@@ -42,11 +39,11 @@ type
     property ProjectFolder: string read FProjectFolder write SetProjectFolder;
     property Folder[aType: TTextDataType]: string read GetFolder;
     property SqlList[aType: TTextDataType]: TTextDatas read GetSqlList;
-    property Macros: TTextDatas read FMacros;
-    property Includes: TTextDatas read FIncludes;
-    property Procs: TTextDatas read FProcs;
-    property Funcs: TTextDatas read FFuncs;
-    property Views: TTextDatas read FViews;
+    property Macros: TTextDatas read FTextDatas[dtMacro];
+    property Includes: TTextDatas read FTextDatas[dtInclude];
+    property Procs: TTextDatas read FTextDatas[dtProc];
+    property Funcs: TTextDatas read FTextDatas[dtFunc];
+    property Views: TTextDatas read FTextDatas[dtView];
   end;
 
 implementation
@@ -60,33 +57,37 @@ uses
   Masks;
 
 const
-  DataTypeToFolderName : array[TTextDataType] of string = ('','Proc','Include','Macro','Func','View');
+  DataTypeToFolderName : array[TTextDataType] of string = ('','Proc','Include','Macro','Func','View','Trigger');
 
 { TSqlProject }
 
 procedure TSqlProject.AfterConstruction;
+var
+  i: TTextDataType;
 begin
   inherited;
-  FMacros := TTextDatas.Create;
-  FFuncs := TTextDatas.Create;
-  FProcs := TTextDatas.Create;
-  FViews := TTextDatas.Create;
-  FIncludes := TTextDatas.Create;
+  FTextDatas[dtNone] := nil;
+  for i := Succ(dtNone) to High(TTextDataType) do
+    FTextDatas[i] := TTextDatas.Create;
+
 end;
 
 procedure TSqlProject.BeforeDestruction;
+var
+  i: TTextDataType;
 begin
   inherited;
-  FreeAndNil(FMacros);
-  FreeAndNil(FFuncs);
-  FreeAndNil(FIncludes);
-  FreeAndNil(FProcs);
-  FreeAndNil(FViews);
+  for i := Succ(dtNone) to High(TTextDataType) do
+  begin
+    FreeAndNil(FTextDatas[i]);
+  end;
 end;
 
 function TSqlProject.GetFolder(aType: TTextDataType): string;
 begin
-  Result := ProjectFolder + DirectorySeparator + DataTypeToFolderName[aType];
+  Result := ProjectFolder + PathDelim + DataTypeToFolderName[aType];
+  if not DirectoryExistsUTF8(Result) then
+    MakeDirectoryUTF8(Result);
 end;
 
 function TSqlProject.GetModified: Boolean;
@@ -106,15 +107,7 @@ end;
 
 function TSqlProject.GetSqlList(aType: TTextDataType): TTextDatas;
 begin
-  case atype of
-    dtNone: Result := nil ;
-    dtProc: Result := Procs;
-    dtInclude: Result := Includes;
-    dtMacro: Result := Macros;
-    dtFunc: Result := Funcs;
-    dtView: Result := Views;
-    else Result := nil;
-  end;
+  Result := FTextDatas[aType];
 end;
 
 procedure TSqlProject.IterateAll(aMethod: TTextDataMethod);
@@ -145,10 +138,10 @@ class procedure TSqlProject.AddQuickFind(AFileName, APath: string;  AResults: TS
   begin
     Dirs := TStringList.Create;
     try
-      if FindFirstUTF8(ABrowsePath + DirectorySeparator + '*.*',faAnyFile,s) = 0 then
+      if FindFirstUTF8(ABrowsePath + PathDelim + '*.*',faAnyFile,s) = 0 then
       try
         repeat
-          FileName := ABrowsePath + DirectorySeparator + s.Name;
+          FileName := ABrowsePath + PathDelim + s.Name;
           if DirectoryExistsUTF8(FileName) then
           begin
             if (Pos(AFolderPrefix,s.name)=0) and (s.Name <> '.') and (s.Name <> '..') then
@@ -177,7 +170,7 @@ class procedure TSqlProject.AddQuickFind(AFileName, APath: string;  AResults: TS
   end;
 
 begin
-  Iterate(APath, '.' + DirectorySeparator);
+  Iterate(APath, '.' + PathDelim);
 end;
 
 
@@ -186,34 +179,17 @@ const
   SQL_FILE = '*.sql';
 var
   FileList: TStringList;
+  i: TTextDataType;
 begin
   FileList := TStringList.Create;
   try
-    AddQuickFind(SQL_FILE, Folder[dtMacro], FileList);
-    FMacros.Clear;
-    AddFilesToTextData(FileList, FMacros, dtMacro);
-
-    FileList.Clear;
-    AddQuickFind(SQL_FILE, Folder[dtInclude], FileList);
-    FIncludes.Clear;
-    AddFilesToTextData(FileList, FIncludes, dtInclude);
-
-    FileList.Clear;
-    AddQuickFind(SQL_FILE, Folder[dtProc], FileList);
-    FProcs.Clear;
-    AddFilesToTextData(FileList, FProcs, dtProc);
-
-    FileList.Clear;
-    AddQuickFind(SQL_FILE, Folder[dtView], FileList);
-    FViews.Clear;
-    AddFilesToTextData(FileList, FViews, dtView);
-
-    FileList.Clear;
-    AddQuickFind(SQL_FILE, Folder[dtFunc], FileList);
-    FViews.Clear;
-    AddFilesToTextData(FileList, FFuncs, dtFunc);
-
-
+    for i := Succ(dtNone) to High(TTextDataType) do
+    begin
+      FileList.Clear;
+      AddQuickFind(SQL_FILE, Folder[i], FileList);
+      SqlList[i].Clear;
+      AddFilesToTextData(FileList, SqlList[i], i);
+    end;
   finally
     FileList.Free;
   end;
