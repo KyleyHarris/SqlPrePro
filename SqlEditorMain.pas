@@ -37,7 +37,7 @@ uses
   SynHighlighterSQL;
 
 const
-  Titles :Array[TTextDataType] of string = ('None', 'Procedures','Includes', 'Macros','Functions','Views');
+  Titles :Array[TTextDataType] of string = ('None', 'Procedures','Includes', 'Macros','Functions','Views','Triggers');
 
 type
 
@@ -287,7 +287,7 @@ var
   i: Integer;
 begin
   FreeAndNil(FTools);
-  fileName := ProjectFolder + DirectorySeparator + 'tools.txt';
+  fileName := ProjectFolder + PathDelim + 'tools.txt';
   if FileExistsUTF8(fileName) then
   begin
     MenuItem := TMenuItem.Create(self);
@@ -307,6 +307,7 @@ begin
           MenuItem.Add(ToolItem);
           Tool := TToolCommand.Create(ToolItem);
           Tool.Caption := FTools.Names[i];
+          Tool.ShortCut := ShortCut(Ord(i+49), [ssCtrl]);
           Tool.Command := Data[0];
           if Data.Count > 1 then
           begin
@@ -330,7 +331,7 @@ end;
 
 function TSqlEditorMainFrm.FolderForCompiledSQL: String;
 begin
-  Result := FProject.ProjectFolder + DirectorySeparator + 'Compiled';
+  Result := FProject.ProjectFolder + PathDelim + 'Compiled';
 end;
 
 procedure TSqlEditorMainFrm.DisplayPeek(word: string; aSwitch: boolean);
@@ -673,7 +674,7 @@ begin
   try
     try
       Lines.Text := FGenerator.CompileSql(aTextData.SQL);
-      FileName := FolderForCompiledSQL + DirectorySeparator + Format('%s.sql',[aTextData.SqlName]);
+      FileName := FolderForCompiledSQL + PathDelim + Format('%s.sql',[aTextData.SqlName]);
       Lines.SaveToFile(FileName);
       Log(Format('Saved: %s.sql',[aTextData.SqlName]));
     except
@@ -845,7 +846,7 @@ begin
   FHighlighter.TableNames.Clear;
   ClearTables;
 
-  FileName := FProject.ProjectFolder + DirectorySeparator + TABLE_FILE;
+  FileName := FProject.ProjectFolder + PathDelim + TABLE_FILE;
   if FileExists(FileName) then
   begin
     Ini := TIniFile.Create(FileName);
@@ -1084,8 +1085,9 @@ begin
     FSql.ReadOnly := True;
   end;
 
-  if Node[FEditingItem] <> ViewAllItems.Selected then
-    ViewAllItems.Selected := Node[FEditingItem];
+  if FEditingItem <> nil then
+    if Node[FEditingItem] <> ViewAllItems.Selected then
+      ViewAllItems.Selected := Node[FEditingItem];
   
 end;
 
@@ -1100,7 +1102,7 @@ begin
   FProject.ProjectFolder := FProjectFolder;
   ProjectName.Text := FProjectFolder;
 
-  FileName := FProjectFolder + DirectorySeparator + TABLE_FILE;
+  FileName := FProjectFolder + PathDelim + TABLE_FILE;
   if FileExists(FileName) then
   begin
     LoadTables;
