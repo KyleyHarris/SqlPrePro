@@ -41,7 +41,7 @@ unit dlgReplaceText;
 interface
 
 uses
-{$IFDEF MSWINDOWS}
+{$IFNDEF FPC}
   Windows,
 {$ENDIF}
   SysUtils, Classes, Graphics, Controls, Forms, Dialogs,

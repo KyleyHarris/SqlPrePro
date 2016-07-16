@@ -5,13 +5,13 @@ interface
 uses
   SysUtils;
 
-    procedure DeleteFileUTF8(const AFileName : string);
-    function FileExistsUTF8(const AFileName: string) : Boolean;
-    function FindFirstUTF8(const APath: string; AAttribute: Integer; var ARecord: TSearchRec): Integer;
-    function DirectoryExistsUTF8(const APath: string): Boolean;
-    function FindNextUTF8(var ARecord: TSearchRec): Integer;
-    procedure MakeDirectoryUTF8(const AFolder: string);
-    procedure FindCloseUTF8(var ARecord: TSearchRec);
+  procedure DeleteFileUTF8(const AFileName : string);
+  function FileExistsUTF8(const AFileName: string) : Boolean;
+  function FindFirstUTF8(const APath: string; AAttribute: Integer; var ARecord: TSearchRec): Integer;
+  function DirectoryExistsUTF8(const APath: string): Boolean;
+  function FindNextUTF8(var ARecord: TSearchRec): Integer;
+  function CreateDirUTF8(const AFolder: string) : Boolean;
+  procedure FindCloseUTF8(var ARecord: TSearchRec);
 
 implementation
 
@@ -31,9 +31,9 @@ begin
   Result := FindFirst(APath,AAttribute,ARecord);
 end;
 
-procedure MakeDirectoryUTF8(const AFolder: string);
+function CreateDirUTF8(const AFolder: string) : Boolean;
 begin
-  MkDir(AFolder);
+  Result := CreateDir(AFolder);
 end;
 
 function DirectoryExistsUTF8(const APath: string): Boolean;
