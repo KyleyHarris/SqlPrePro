@@ -45,13 +45,16 @@ type
   private
     FCommand: string;
     FParamStr: string;
+    FFolder: string;
     procedure SetCommand(const Value: string);
     procedure SetParamStr(const Value: string);
+    procedure SetFolder(const Value: string);
   public
     function Execute: Boolean; override;
 
     property Command: string read FCommand write SetCommand;
     property ParamStr: string read FParamStr write SetParamStr;
+    property Folder: string read FFolder write SetFolder;
   end;
 
   TSqlEditorMainFrm = class(TForm, ILogger)
@@ -309,6 +312,7 @@ begin
           Tool.Caption := FTools.Names[i];
           Tool.ShortCut := ShortCut(Ord(i+49), [ssCtrl]);
           Tool.Command := Data[0];
+          Tool.Folder := ProjectFolder;
           if Data.Count > 1 then
           begin
             Data.Delete(0);
@@ -1216,7 +1220,7 @@ begin
       ExternalProcess.Free;
     end;
 {$ELSE}
-    ShellExecute(0,'OPEN',PChar(Self.FCommand), PChar(Self.FParamStr), '', SW_SHOW);
+    ShellExecute(0,'OPEN',PChar(Self.FCommand), PChar(Self.FParamStr), PChar(Self.FFolder), SW_SHOW);
 {$ENDIF}
   end;
 end;
@@ -1224,6 +1228,11 @@ end;
 procedure TToolCommand.SetCommand(const Value: string);
 begin
   FCommand := Value;
+end;
+
+procedure TToolCommand.SetFolder(const Value: string);
+begin
+  FFolder := Value;
 end;
 
 procedure TToolCommand.SetParamStr(const Value: string);
