@@ -210,6 +210,20 @@ var
   end;
   function WhiteSpace(APos:integer):boolean;
   begin
+    {$IFDEF VER180}
+    result := GetChar(APos) in [
+    #0..#31,
+    #32,
+    ',',
+    '/',
+    '+',
+    '.',
+    '-',
+    '*',
+    '(',
+    ')',
+    '='];
+    {$ELSE}
     result := CharInSet(GetChar(APos),[
     #0..#31,
     #32,
@@ -222,6 +236,7 @@ var
     '(',
     ')',
     '=']);
+    {$ENDIF}
   end;
 var
 

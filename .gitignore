@@ -5,3 +5,4 @@ dcu/
 lib
 Bin
 /SqlEditorMain.pas.orig
+*.bak

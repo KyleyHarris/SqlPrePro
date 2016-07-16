@@ -350,8 +350,8 @@ begin
   if word = '' then
     exit;
 
-  if word[Length(word)] = '#' then
-    Delete(word, Length(word), 1);
+  if word[1] = IncludeTag then
+    Delete(word, 1, 1);
 
   if FProject.TextDataByName(word, FoundItem, SqlType) then
   begin
@@ -596,8 +596,8 @@ begin
         for i := 0 to FProject.Includes.Count - 1 do
         begin
           Item := FProject.Includes[i];
-          FCodeC.ItemList.AddObject ( 'function \column{}#'+Item.SQLName+'#',Item);
-          FCodeC.InsertList.AddObject('#'+Item.SQLName+'#',Item);
+          FCodeC.ItemList.AddObject ( 'function \column{}'+IncludeTag+Item.SQLName,Item);
+          FCodeC.InsertList.AddObject(IncludeTag+Item.SQLName,Item);
         end;
 
         AddMacros;
@@ -956,8 +956,9 @@ begin
       Token := GetToken;
       if (not SameText(aTextData.SQLName, Token)) and  (GetTokenKind = ord(tkIdentifier)) then
       begin
-        if Token[Length(Token)] = '#' then
-          Delete(Token, Length(Token), 1);
+
+        if (Token <> '') and (Token[1] = IncludeTag) then
+          Delete(Token, 1, 1);
 
         if FProject.TextDataByName(Token, FoundItem, SqlType) then
         begin

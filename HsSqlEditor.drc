@@ -548,11 +548,11 @@ END
 
 /* c:\program files\codegear\rad studio\5.0\lib\Controls.res */
 /* x:\hss\3rdparty\SynEdit\Source\SynEdit.res */
-/* c:\program files\codegear\rad studio\5.0\lib\Buttons.res */
-/* c:\program files\codegear\rad studio\5.0\lib\ExtDlgs.res */
 /* .\SearchAndReplace\dlgSearchText.dfm */
 /* .\SearchAndReplace\dlgReplaceText.dfm */
 /* .\SearchAndReplace\dlgConfirmReplace.dfm */
-/* Z:\source\SqlPrePro\Main\SqlEditorMain.dfm */
+/* c:\program files\codegear\rad studio\5.0\lib\Buttons.res */
+/* c:\program files\codegear\rad studio\5.0\lib\ExtDlgs.res */
+/* SqlEditorMain.dfm */
 /* Z:\source\SqlPrePro\Main\HsSqlEditor.res */
 /* Z:\source\SqlPrePro\Main\HsSqlEditor.drf */

@@ -10,7 +10,10 @@ uses
   SynHighlighterSQL,
   Contnrs, uLogger;
 
+const
+  IncludeTag = '$';
 type
+
   TSqlGenerator = class(TObject)
   private
     FLog: ILogger;
@@ -361,14 +364,13 @@ var
 
               end;
 
-             end ;//else raise Exception.Create('Unterminated Macro ');
-
+            end;
           end;
 
         end else
         begin
           s := SQL.GetToken;
-          if s ='#' then
+          if s[1] =IncludeTag then
           begin
             CodeStack := THsTextDataCodeStack.Create;
             CodeStack.InsertPos := SQL.GetTokenPos+1;
@@ -379,21 +381,16 @@ var
             begin
               Stack.pop.Free;
             end else
-            if data[length(data)] = '#' then
             begin
               CodeStack.DeleteSize := (SQL.GetTokenPos+Length(Data)) - CodeStack.InsertPos + 1 ;
-              data := copy(data,1,length(data)-1);
               if FIncludes.IndexOf(LowerCase(data)) <> -1 then
               begin
-                GlobalStack.Add(Format('#%s#',[data]));
+                GlobalStack.Add(Format('$%s',[data]));
                 CodeStack.Data := ExpandString(Content((FIncludes.Objects[FIncludes.IndexOf(LowerCase(data))] as THsTextData).SQL));
                 GlobalStack.Delete(GlobalStack.Count-1);
               end else
                 raise Exception.Create('Unknown Fragment:'+data);
-            end else
-            begin
-              Stack.pop.Free;
-            end;
+            end
           end;
         end;
         SQL.Next;
