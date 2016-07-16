@@ -93,9 +93,7 @@ var
   gbSearchCaseSensitive: boolean;
   gbSearchFromCaret: boolean;
   gbSearchSelectionOnly: boolean;
-  gbSearchTextAtCaret: boolean;
   gbSearchWholeWords: boolean;
-  gbSearchRegex: boolean;
 
   gsSearchText: string;
   gsSearchTextHistory: string;
@@ -104,7 +102,6 @@ var
   bSearchFromCaret: Boolean;
 
 resourcestring
-  STextNotFound = 'Text not found';
   SNoSelectionAvailable = 'The is no selection available, search whole text?';
 
 
@@ -233,14 +230,6 @@ begin
     SearchInSelectionOnly := gbSearchSelectionOnly;
     // start with last search text
     SearchText := gsSearchText;
-    if gbSearchTextAtCaret then begin
-      // if something is selected search for that text
-      if SelAvail and {$IFDEF FPC}(BlockBegin.Y = BlockEnd.Y){$ELSE} (BlockBegin.Line = BlockEnd.Line) {$ENDIF}
-      then
-        SearchText := SelText
-      else
-        SearchText := WordAtCursor;
-    end;
     SearchTextHistory := gsSearchTextHistory;
     if AReplace then with dlg as TTextReplaceDialog do begin
       ReplaceText := gsReplaceText;
@@ -255,7 +244,6 @@ begin
       gbSearchCaseSensitive := SearchCaseSensitive;
       gbSearchFromCaret := SearchFromCursor;
       gbSearchWholeWords := SearchWholeWords;
-      gbSearchRegex := SearchRegularExpression;
       gsSearchText := SearchText;
       gsSearchTextHistory := SearchTextHistory;
       if AReplace then with dlg as TTextReplaceDialog do begin

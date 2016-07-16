@@ -87,7 +87,7 @@ function TSqlProject.GetFolder(aType: TTextDataType): string;
 begin
   Result := ProjectFolder + PathDelim + DataTypeToFolderName[aType];
   if not DirectoryExistsUTF8(Result) then
-    MakeDirectoryUTF8(Result);
+    CreateDirUTF8(Result);
 end;
 
 function TSqlProject.GetModified: Boolean;
