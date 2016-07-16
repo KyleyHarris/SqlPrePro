@@ -210,7 +210,7 @@ var
   end;
   function WhiteSpace(APos:integer):boolean;
   begin
-    result := GetChar(APos) in [
+    result := CharInSet(GetChar(APos),[
     #0..#31,
     #32,
     ',',
@@ -221,7 +221,7 @@ var
     '*',
     '(',
     ')',
-    '='];
+    '=']);
   end;
 var
 
