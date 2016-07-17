@@ -1,3 +1,4 @@
+// This code compiles sql that includes macros and includes.
 unit uSqlGenerator;
 
 interface
@@ -11,6 +12,8 @@ uses
   Contnrs, uLogger;
 
 const
+  // used as the identifier for an include fragment.
+  // if the fragment name is tst then $tst is typed into the editor
   IncludeTag = '$';
 type
 
@@ -30,6 +33,7 @@ type
 implementation
 
 type
+
   THsTextDataCodeStack = class(TObject)
     InsertPos:integer;
     DeleteSize:integer;
@@ -49,7 +53,6 @@ begin
   FLog := aLog;
   LoadMacros(aMacros);
   LoadIncludes(aIncludes);
-
 end;
 
 destructor TSqlGenerator.Destroy;
@@ -66,7 +69,7 @@ begin
   FIncludes.Clear;
   for i := 0 to aIncludes.Count - 1 do
     FIncludes.AddObject(aIncludes[i].SQLName, aIncludes[i]);
-  FIncludes.CaseSensitive := False;  
+  FIncludes.CaseSensitive := False;
   FIncludes.Sorted := True;
 end;
 
@@ -77,7 +80,7 @@ begin
   FMacros.Clear;
   for i := 0 to aMacros.Count - 1 do
     FMacros.AddObject(aMacros[i].SQLName, aMacros[i]);
-  FMacros.CaseSensitive := False;  
+  FMacros.CaseSensitive := False;
   FMacros.Sorted := True;
 end;
 
@@ -85,7 +88,7 @@ function TSqlGenerator.CompileSql(AString: string): string;
 
 
 var
-  GlobalStack: TStringList;
+  LoggingStack: TStringList;
   StackLevel:integer;
 
   function ExpandString(Value:string):string;forward;
@@ -265,7 +268,7 @@ var
 
   end;
 
-  function Content(aString: string): string;
+  function GetIncludeContent(aString: string): string;
   var
     List : TStrings;
     BreakLength, LastPos: Integer;
@@ -296,13 +299,13 @@ var
     CodeStack:THsTextDataCodeStack;
     PrivateMacros:TTextDatas;
 
-    procedure Loop;
+    procedure ProcessSourceIntoCodeStack;
     var
       s:string;
       lasttoken:string;
       iPos:integer;
       data :string;
-      iMDP,iMDE:integer;
+      iMacroOpeningBracket,iMacroClosingBracket:integer;
       NestBracket:integer;
       Kind:TtkTokenKind;
     begin
@@ -328,21 +331,28 @@ var
 
           if (FMacros.IndexOf(s) <> -1) and (LastToken <> '.' ) then
           begin
+
             data := s;
             SQL.Next;
             s := SQL.GetToken;
 
             if s = '(' then
             begin
+              // we are possibly in a macro execute block, where data is the possible name of a macro
 
               CodeStack := THsTextDataCodeStack.Create;
               Stack.Push(CodeStack);
 
               CodeStack.Macro := FMacros.Objects[FMacros.IndexOf(data)] as THsTextData;
+              // first character of the macro that we need to delete from
               CodeStack.InsertPos := iPos;
 
               NestBracket := 0;
-              iMDP := SQL.GetTokenPos +1;
+              // Record the starting point of the macro parameter stack.
+              iMacroOpeningBracket := SQL.GetTokenPos +1;
+
+              // ProcessSourceIntoCodeStack through to find the end of the macro parameters, keeping track of nested brackets
+              // so that all content is parsed in correctly.
               repeat
                 SQL.Next;
                 s := SQL.GetToken;
@@ -351,16 +361,26 @@ var
               until SQL.GetEol or (SQL.GetTokenKind = Ord(tkSymbol)) and ( (s=')') and (NestBracket < 0) );
 
               if s <> ')' then
-                raise Exception.Create('Unterminated Macro ') else
               begin
-                iMDE := SQL.GetTokenPos+1;
-                CodeStack.DeleteSize := iMDE - CodeStack.InsertPos + 1;
-                Inc(iMDP);
-                Dec(iMDE);
-                Data :=  Copy(result,iMDP,iMDE-iMDP+1);
-                GlobalStack.Add(Format('%s(%s)',[CodeStack.Macro.SQLName, Data]));
+                // if we are here then we have an unterminated macro or a block of code that
+                // appears to be an unterminated macro such as Test(
+                // this is reasonable to raise as the format is not valid in normal sql to have
+                // this type of free flow text.
+                raise Exception.Create('Unterminated Macro ');
+              end
+              else
+              begin
+                iMacroClosingBracket := SQL.GetTokenPos+1;
+                CodeStack.DeleteSize := iMacroClosingBracket - CodeStack.InsertPos + 1;
+
+                Data :=  Copy(result,
+                              iMacroOpeningBracket + 1,
+                              (iMacroClosingBracket-iMacroOpeningBracket-1) // Length of content including brackets, minus the brackets
+                              );
+
+                LoggingStack.Add(Format('%s(%s)',[CodeStack.Macro.SQLName, Data]));
                 CodeStack.Data := ExpandMacro(CodeStack.Macro,data,StackLevel);
-                GlobalStack.Delete(GlobalStack.Count-1);
+                LoggingStack.Delete(LoggingStack.Count-1);
 
               end;
 
@@ -370,8 +390,9 @@ var
         end else
         begin
           s := SQL.GetToken;
-          if s[1] =IncludeTag then
+          if s[1] = IncludeTag then
           begin
+            // Break down the include tag to replace the content.
             CodeStack := THsTextDataCodeStack.Create;
             CodeStack.InsertPos := SQL.GetTokenPos+1;
             Stack.Push(CodeStack);
@@ -379,17 +400,19 @@ var
             data := SQL.GetToken;
             if Data = '' then
             begin
+              // we just found a IncludeTag symbol and there is no replacement to be done.
               Stack.pop.Free;
             end else
             begin
-              CodeStack.DeleteSize := (SQL.GetTokenPos+Length(Data)) - CodeStack.InsertPos + 1 ;
-              if FIncludes.IndexOf(LowerCase(data)) <> -1 then
+              // get the size to extract from original source before inserting the new source
+              CodeStack.DeleteSize := Length(data) + Length(IncludeTag);
+              if FIncludes.IndexOf(data) <> -1 then
               begin
-                GlobalStack.Add(Format('$%s',[data]));
-                CodeStack.Data := ExpandString(Content((FIncludes.Objects[FIncludes.IndexOf(LowerCase(data))] as THsTextData).SQL));
-                GlobalStack.Delete(GlobalStack.Count-1);
+                LoggingStack.Add(Format('$%s',[data]));
+                CodeStack.Data := ExpandString(GetIncludeContent((FIncludes.Objects[FIncludes.IndexOf(LowerCase(data))] as THsTextData).SQL));
+                LoggingStack.Delete(LoggingStack.Count-1);
               end else
-                raise Exception.Create('Unknown Fragment:'+data);
+                raise Exception.Create('Unknown Fragment: '+IncludeTag+data);
             end
           end;
         end;
@@ -400,27 +423,30 @@ var
     end;
 
 
-    procedure LoopMacros;
+    procedure ExtractLocalMacros;
+    const
+      localMacroStart = 'localmacro';
+      localMacroEnd = 'endmacro';
     var
       s:string;
       iPos:integer;
-      iMDP,iMDE:integer;
+      iMacroOpeningBracket,iMacroClosingBracket:integer;
       Macro:THsTextData;
       Kind:TtkTokenKind;
-
-    begin
+     begin
+      // Scan the code for any local macros
       SQL.ResetRange;
       SQL.SetLine(result, 1);
       while not SQL.GetEol do
       begin
         Kind := ttkTokenKind( SQL.GetTokenKind);
-        s := lowercase(SQL.GetToken);
+        s := SQL.GetToken;
 
         if Kind = tkIdentifier then
         begin
-          iPos := SQL.GetTokenPos+1;
+          iPos := SQL.GetTokenPos + 1;
 
-          if sametext(s,'localmacro') then
+          if sametext(s, localMacroStart) then
           begin
             Macro := PrivateMacros.Add;
             SQL.next;
@@ -434,26 +460,28 @@ var
 
             CodeStack.Macro := Macro;
             CodeStack.InsertPos := iPos;
-            iMDP := SQL.GetTokenPos + Length(Macro.SQLName);
+            iMacroOpeningBracket := SQL.GetTokenPos + Length(Macro.SQLName);
             repeat
               SQL.Next;
-
               s := SQL.GetToken;
-            until SQL.GetEol or (sametext(s,'endmacro'));
+            until SQL.GetEol or (sametext(s,localMacroEnd));
 
-            if sametext(s,'endmacro') then
+            if sametext(s,localMacroEnd) then
             begin
 
               begin
-                iMDE := SQL.GetTokenPos;
-                CodeStack.DeleteSize := iMDE - CodeStack.InsertPos + 9;
-                Inc(iMDP);
-                Dec(iMDE);
-                Macro.sql := 'MACRO '+Macro.SQLName+' '+ Copy(result,iMDP,iMDE-iMDP+1);
+                iMacroClosingBracket := SQL.GetTokenPos;
+                CodeStack.DeleteSize := iMacroClosingBracket - CodeStack.InsertPos + 9;
+                Inc(iMacroOpeningBracket);
+                Dec(iMacroClosingBracket);
+                Macro.sql := 'MACRO '+Macro.SQLName+' '+ Copy(result,iMacroOpeningBracket,iMacroClosingBracket-iMacroOpeningBracket+1);
                 CodeStack.Data := '';
               end;
 
-             end else raise Exception.Create('Unterminated Macro ');
+            end else
+            begin
+              raise Exception.Create('Unterminated localMacro:'+Macro.SqlName);
+            end;
 
           end;
 
@@ -471,86 +499,109 @@ var
     Result := Value;
 
     PrivateMacros := TTextDatas.Create;
-
-    SQL := TSynSQLSyn.Create(nil);
-    Stack := TObjectStack.Create;
     try
-      LoopMacros;
-      while Stack.Count > 0 do
-      begin
-        CodeStack := Stack.Pop as THsTextDataCodeStack;
-        system.Delete(Result,CodeStack.InsertPos,CodeStack.DeleteSize);
-        system.Insert(CodeStack.Data,Result,CodeStack.InsertPos);
-        FreeAndNil(CodeStack);
-      end;
-    finally
-      FreeAndNil(SQL);
-      while Stack.Count > 0 do
-      begin
-        Stack.Pop.Free;
-      end;
-      FreeAndNil(Stack);
-    end;
-
-    for a := 0 to PrivateMacros.Count - 1 do
-    begin
-      if FMacros.IndexOf(lowercase(PrivateMacros[a].SQLName)) <> -1 then
-        raise exception.create('Local Macro nameing conflict:'+PrivateMacros[a].SQLName);
-      FMacros.AddObject(lowercase(PrivateMacros[a].SQLName),PrivateMacros[a]) ;
-    end;
-
-    SQL := TSynSQLSyn.Create(nil);
-    Stack := TObjectStack.Create;
-    try
+      // Find and extract all local macros from the source and
+      SQL := TSynSQLSyn.Create(nil);
+      Stack := TObjectStack.Create;
       try
-      Loop;
-      except
-   //     Loop;
-        raise  ;
-      end  ;
-      while Stack.Count > 0 do
-      begin
-        CodeStack := Stack.Pop as THsTextDataCodeStack;
-        system.Delete(Result,CodeStack.InsertPos,CodeStack.DeleteSize);
-        system.Insert(CodeStack.Data,Result,CodeStack.InsertPos);
-        FreeAndNil(CodeStack);
+        ExtractLocalMacros;
+        while Stack.Count > 0 do
+        begin
+          CodeStack := Stack.Pop as THsTextDataCodeStack;
+          system.Delete(Result,CodeStack.InsertPos,CodeStack.DeleteSize);
+          system.Insert(CodeStack.Data,Result,CodeStack.InsertPos);
+          FreeAndNil(CodeStack);
+        end;
+      finally
+        FreeAndNil(SQL);
+        while Stack.Count > 0 do
+        begin
+          Stack.Pop.Free;
+        end;
+        FreeAndNil(Stack);
       end;
-    finally
-      FreeAndNil(SQL);
-      while Stack.Count > 0 do
-      begin
-        Stack.Pop.Free;
-      end;
-      FreeAndNil(Stack);
-    end;
-    for a := 0 to PrivateMacros.Count - 1 do
-      FMacros.Delete( FMacros.IndexOfObject(PrivateMacros[a]));
 
-    FreeAndNil(PrivateMacros);
+
+      // Check private macro names have no conflict and insert them into the
+      // general macros list for processing.
+      for a := 0 to PrivateMacros.Count - 1 do
+      begin
+        if FMacros.IndexOf(lowercase(PrivateMacros[a].SQLName)) <> -1 then
+          raise exception.create('Local Macro nameing conflict:'+PrivateMacros[a].SQLName);
+        FMacros.AddObject(lowercase(PrivateMacros[a].SQLName),PrivateMacros[a]) ;
+      end;
+
+
+      SQL := TSynSQLSyn.Create(nil);
+      Stack := TObjectStack.Create;
+      try
+        // parse source for all macros and includes that will need to be compiled and replaced
+        ProcessSourceIntoCodeStack;
+
+        // process all code back into the result.
+        while Stack.Count > 0 do
+        begin
+          CodeStack := Stack.Pop as THsTextDataCodeStack;
+          system.Delete(Result,CodeStack.InsertPos,CodeStack.DeleteSize);
+          system.Insert(CodeStack.Data,Result,CodeStack.InsertPos);
+          FreeAndNil(CodeStack);
+        end;
+
+      finally
+        FreeAndNil(SQL);
+        while Stack.Count > 0 do
+        begin
+          Stack.Pop.Free;
+        end;
+        FreeAndNil(Stack);
+      end;
+
+      // clean up and remove all the private macros
+      for a := 0 to PrivateMacros.Count - 1 do
+        FMacros.Delete( FMacros.IndexOfObject(PrivateMacros[a]));
+    finally
+      FreeAndNil(PrivateMacros);
+    end;
 
     Dec(StackLevel);
 
   end;
 
+var
+  ResultData: TStringList;  
 begin
-  GlobalStack := TStringList.Create;
+  LoggingStack := TStringList.Create;
   try
     try
       StackLevel := 0;
-      result := ExpandString(AString);
-      result := ReplaceNoCase(result,'EmptyId','''00000000-0000-0000-0000-000000000000''');
+
+      ResultData := TStringList.Create;
+      try
+        ResultData.Text := ExpandString(AString);
+        // clean out empty lines that may be left from local macros etc.
+        // not that necessary, but cleaner when previewing 
+        while (ResultData.Count > 1) and (Trim(ResultData[0]) = '') do
+          ResultData.Delete(0);
+
+        Result := ReplaceNoCase(ResultData.Text,'EmptyId','''00000000-0000-0000-0000-000000000000''');
+      finally
+        FreeAndNil(ResultData);
+      end;
+      
     except
       on E:Exception do
       begin
         result := 'ERROR';
-        raise Exception.Create('Stack Error' + sLineBreak + GlobalStack.Text);
+        raise Exception.Create(
+          'Error Message: ' + e.Message + sLineBreak +
+          'Stack At Error' + sLineBreak +
+          LoggingStack.Text
+          );
       end;
     end;
   finally
-    GlobalStack.Free;
+    LoggingStack.Free;
   end;
-
-
 end;
 
 end.
