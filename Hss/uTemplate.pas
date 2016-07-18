@@ -78,14 +78,12 @@ uses
   StrUtils,
   Math;
 
-
 type
   TLongestFirst = class(TStringList)
   public
     procedure LongestFirst;
   end;
 { TTemplate }
-
 
 
 function HssStringReplace(const s:string; AFind, AReplace: string): string;
@@ -208,35 +206,16 @@ var
       result := #32 else
       result := AValue[APos];
   end;
+
   function WhiteSpace(APos:integer):boolean;
+  const
+    WHITE_SPACE_CHARS = [#0..#32,',','/','+','.','-','*','(',')','='];
   begin
-    {$IFDEF VER180}
-    result := GetChar(APos) in [
-    #0..#31,
-    #32,
-    ',',
-    '/',
-    '+',
-    '.',
-    '-',
-    '*',
-    '(',
-    ')',
-    '='];
-    {$ELSE}
-    result := CharInSet(GetChar(APos),[
-    #0..#31,
-    #32,
-    ',',
-    '/',
-    '+',
-    '.',
-    '-',
-    '*',
-    '(',
-    ')',
-    '=']);
-    {$ENDIF}
+{$IF DEFINED(FPC) or (CompilerVersion > 18)}
+    result := CharInSet(GetChar(APos),WHITE_SPACE_CHARS);
+{$ELSE}
+    result := GetChar(APos) in WHITE_SPACE_CHARS;
+{$IFEND}
   end;
 var
 
