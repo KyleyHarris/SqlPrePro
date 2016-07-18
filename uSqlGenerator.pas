@@ -527,7 +527,7 @@ var
       for a := 0 to PrivateMacros.Count - 1 do
       begin
         if FMacros.IndexOf(lowercase(PrivateMacros[a].SQLName)) <> -1 then
-          raise exception.create('Local Macro nameing conflict:'+PrivateMacros[a].SQLName);
+          raise exception.create('Local Macro naming conflict:'+PrivateMacros[a].SQLName);
         FMacros.AddObject(lowercase(PrivateMacros[a].SQLName),PrivateMacros[a]) ;
       end;
 
