@@ -215,8 +215,7 @@ var
     result := CharInSet(GetChar(APos),WHITE_SPACE_CHARS);
 {$ELSE}
     result := GetChar(APos) in WHITE_SPACE_CHARS;
-{$IFEND}
-  end;
+{$IFEND}  end;
 var
 
   p:string;
