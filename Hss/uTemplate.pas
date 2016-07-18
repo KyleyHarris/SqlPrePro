@@ -211,7 +211,7 @@ var
   const
     WHITE_SPACE_CHARS = [#0..#32,',','/','+','.','-','*','(',')','='];
   begin
-{$IF DEFINED(FPC) or (CompilerVersion > 18)}
+{$IF DEFINED(FPC) or (CompilerVersion > 19)}
     result := CharInSet(GetChar(APos),WHITE_SPACE_CHARS);
 {$ELSE}
     result := GetChar(APos) in WHITE_SPACE_CHARS;
