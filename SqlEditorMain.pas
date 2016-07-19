@@ -17,7 +17,6 @@ uses
   Controls,
   Forms,
   Dialogs,
-  SynEdit,
   ExtCtrls,
   ComCtrls,
   StdCtrls,
@@ -27,13 +26,10 @@ uses
   uSqlProject,
   uTextData,
   uSqlGenerator,
-// synedit code
-{$IFNDEF FPC}
-  SynCompletionProposal,
-{$ENDIF}
-// Others
   uSqlEditor,
   uLogger,
+// synedit code
+  SynCompletionProposal,
   SynHighlighterSQL;
 
 const
@@ -129,12 +125,8 @@ type
     FHighlighter: TSynSQLSyn;
     FProjectFolder: string;
     FTables: TStringList;
-{$IFNDEF FPC}
     FCodeC: TSynCompletionProposal;
-    procedure CodeCExecute(Kind: SynCompletionType; Sender: TObject;
-      var CurrentInput: string; var x, y: Integer;
-      var CanExecute: Boolean);
-{$Endif}
+    procedure CodeCExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
     procedure ClearTables;
     procedure LoadTables;
     procedure Log(AValue: string);
@@ -173,7 +165,6 @@ type
 
     property Node[aTextData: THsTextData]: TTreeNode read GetNode;
     property ActiveHeaderNode: TTreeNode read GetActiveHeaderNode;
-    { Private declarations }
   public
     property ProjectFolder: string read FProjectFolder write SetProjectFolder;
     procedure AddFilesToTextData(aFiles: TStrings; aSqlList: TTextDatas);
@@ -397,17 +388,14 @@ end;
 
 procedure TSqlEditorMainFrm.EnableCodeComplete;
 begin
-{$IFNDEF FPC}
   FCodeC := TSynCompletionProposal.Create(Self);
   FCodeC.OnExecute := CodeCExecute;
 
   FCodeC.AddEditor(FSql);
-//  FCodeC.Columns.Add.BiggestWord := 'propertyand';
   FCodeC.Options := [scoLimitToMatchedText, scoUseInsertList, scoUsePrettyText, scoUseBuiltInTimer, scoEndCharCompletion, scoCompleteWithTab, scoCompleteWithEnter];
   FCodeC.EndOfTokenChr := '()[]. ';
   FCodeC.TriggerChars := '#.@_';
   FCodeC.TimerInterval := 200;
-{$Endif}
 end;
 
 procedure TSqlEditorMainFrm.ParameterList(AText: string; AParams, ATables,
@@ -489,10 +477,12 @@ begin
   FTables.Clear;
 end;
 
-{$IFNDEF FPC}
-
-procedure TSqlEditorMainFrm.CodeCExecute(Kind: SynCompletionType; Sender: TObject;
-  var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
+procedure TSqlEditorMainFrm.CodeCExecute(
+  Kind: SynCompletionType;
+  Sender: TObject;
+  var CurrentInput: string;
+  var x, y: Integer;
+  var CanExecute: Boolean);
 var
   Params,Tables,TableAlias:TStringList;
   i,i1:integer;
@@ -654,7 +644,6 @@ begin
   end;
 
 end;
-{$EndIf}
 
 function TSqlEditorMainFrm.CompiledSQL(aSql: string): string;
 begin
