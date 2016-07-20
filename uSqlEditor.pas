@@ -39,6 +39,7 @@ type
     procedure IncreaseFontSize;
     procedure DecreaseFontSize;
     property OnMouseWheel;
+    property OnEnter;
 
     property OnJumpToDeclaration: TJumpToDeclarationEvent read FOnJumpToDeclaration write SetOnJumpToDeclaration;
   end;
