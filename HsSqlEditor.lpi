@@ -40,7 +40,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="12">
+    <Units Count="2">
       <Unit0>
         <Filename Value="HsSqlEditor.dpr"/>
         <IsPartOfProject Value="True"/>
@@ -52,55 +52,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit1>
-      <Unit2>
-        <Filename Value="uSqlGenerator.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="uTextData.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit3>
-      <Unit4>
-        <Filename Value="uSqlProject.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit4>
-      <Unit5>
-        <Filename Value="Hss/uTemplate.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit5>
-      <Unit6>
-        <Filename Value="Hss/uHssStringList.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit6>
-      <Unit7>
-        <Filename Value="Hss/uHssStringsCSV.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit7>
-      <Unit8>
-        <Filename Value="uSqlEditor.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit8>
-      <Unit9>
-        <Filename Value="SearchAndReplace/dlgConfirmReplace.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="ConfirmReplaceDialog"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit9>
-      <Unit10>
-        <Filename Value="SearchAndReplace/dlgReplaceText.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="TextReplaceDialog"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit10>
-      <Unit11>
-        <Filename Value="SearchAndReplace/dlgSearchText.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="TextSearchDialog"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit11>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -110,7 +61,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="Hss;SearchAndReplace;$(ProjOutDir);$(LazarusDir)/components/synedit"/>
-      <OtherUnitFiles Value="Hss;SearchAndReplace"/>
+      <OtherUnitFiles Value="Hss;SearchAndReplace;SynEditExtension"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

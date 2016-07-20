@@ -10,6 +10,9 @@ uses
 {$ENDIF}
   Classes,
   Types,
+{$IFDEF FPC}
+  SynSQLEditor,
+{$ENDIF}
   SynHighlighterSQL,
   SynEditRegexSearch,
   SynEditSearch,
@@ -17,35 +20,27 @@ uses
   SynEdit;
 
 type
-  TJumpToDeclarationEvent = procedure(Sender: TObject; word : string)
-    of object;
+  TJumpToDeclarationEvent = procedure(Sender: TObject; word : string) of object;
 
-  { TSqlEditor }
-
-  TSqlEditor = class(TSynEdit)
+  TSqlEditor = class({$IFDEF FPC}TCustomSQLEditor{$ELSE}TCustomSynEdit{$ENDIF})
   private
     FOnJumpToDeclaration: TJumpToDeclarationEvent;
     procedure DoSearchReplaceText(AReplace, ABackwards: boolean);
     procedure ShowSearchReplaceDialog(AReplace: boolean);
     procedure KeyUpHandler(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure SetOnJumpToDeclaration(const Value: TJumpToDeclarationEvent);
-{$IFDEF FPC}
-    function GetWordAtCursor : string;
-{$ENDIF}
   protected
     SearchRegEx: TSynEditRegexSearch;
     Search: TSynEditSearch;
-    function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;
-      MousePos: TPoint): Boolean; override;
+    function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint): Boolean; override;
   public
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
     procedure IncreaseFontSize;
     procedure DecreaseFontSize;
     property OnMouseWheel;
-{$IFDEF FPC}
-    property WordAtCursor: string read GetWordAtCursor;
-{$ENDIF}
+    property OnEnter;
+
     property OnJumpToDeclaration: TJumpToDeclarationEvent read FOnJumpToDeclaration write SetOnJumpToDeclaration;
   end;
 
@@ -54,7 +49,7 @@ implementation
 uses
   dlgConfirmReplace,
   dlgSearchText,
-  dlgReplaceText, Math, SysUtils, Dialogs, Controls;
+  dlgReplaceText, Math, SysUtils, Controls, Dialogs;
 
 procedure TSqlEditor.DecreaseFontSize;
 begin
@@ -67,8 +62,8 @@ procedure TSqlEditor.AfterConstruction;
 begin
   inherited;
   SearchRegEx := TSynEditRegexSearch.Create(self);
-  Search := TSynEditSearch.Create({$IFNDEF FPC}Self{$ENDIF});
-//  AddKeyDownHandler(KeyUpHandler);
+  Search := TSynEditSearch.Create({$IFNDEF FPC}nil{$ENDIF});
+  AddKeyDownHandler(KeyUpHandler);
 end;
 
 procedure TSqlEditor.BeforeDestruction;
@@ -205,13 +200,6 @@ procedure TSqlEditor.SetOnJumpToDeclaration(const Value: TJumpToDeclarationEvent
 begin
   FOnJumpToDeclaration := Value;
 end;
-
-{$IFDEF FPC}
-function TSqlEditor.GetWordAtCursor: string;
-begin
-  Result := GetWordAtRowCol(CaretXY);
-end;
-{$ENDIF}
 
 procedure TSqlEditor.ShowSearchReplaceDialog(AReplace: boolean);
 var
