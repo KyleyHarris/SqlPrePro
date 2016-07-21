@@ -1,9 +1,9 @@
 testofyu
 create procedure testofyu as
 begin
-#PROC_BEGIN#
+$PROC_BEGIN
  
-DECLARE @ID #GUID#, @Email VarChar(120)
+DECLARE @ID $GUID, @Email VarChar(120)
 
 _ExecCursor( MyCursor,
   =( Select Id, Email From Account where name like 'K%'),
@@ -11,5 +11,5 @@ _ExecCursor( MyCursor,
   =( insert into test (key, value) values (@ID, @Email) ) 
 )
 
-#PROC_END#
+$PROC_END
 end

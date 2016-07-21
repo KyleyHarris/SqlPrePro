@@ -10,8 +10,8 @@ ENDMACRO
 
 create procedure magic (@SNAME VARCHAR(90)) as 
 begin
-  #PROC_BEGIN#
-  DECLARE @ID #GUID#            
+  $PROC_BEGIN
+  DECLARE @ID $GUID            
   DECLARE @NAME VarChar(50)
   FastCursor(Speed)
     Select Id, Name from Account
@@ -22,6 +22,6 @@ begin
     _SpeedCode()
   );
  
-  #PROC_END#
+  $PROC_END
  
 end;                                              

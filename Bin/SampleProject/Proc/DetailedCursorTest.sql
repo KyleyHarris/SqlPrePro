@@ -1,9 +1,9 @@
 DetailedCursorTest
 create procedure DetailedCursorTest as
 begin
-#PROC_BEGIN#
+$PROC_BEGIN
  
-DECLARE @ID #GUID#, @Email VarChar(120)
+DECLARE @ID $GUID, @Email VarChar(120)
 
 _ExecCursor( MyCursor,
   =( Select a.Id, c.Name From Account 
@@ -23,5 +23,5 @@ _ExecCursor( MyCursor,
    ) 
 )
 
-#PROC_END#
+$PROC_END
 end
