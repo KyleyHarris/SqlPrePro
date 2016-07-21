@@ -33,13 +33,18 @@ type
 implementation
 
 type
-
   THsTextDataCodeStack = class(TObject)
     InsertPos:integer;
     DeleteSize:integer;
     Data:string;
     Macro:THsTextData;
   end;
+
+const
+  LIST_SYNTAX = '%LIST';
+  MACRO_KEYWORD = 'MACRO';
+  MACRO_LENGTH : Integer = Length(MACRO_KEYWORD);
+  BREAK_LENGTH : Integer = Length(sLineBreak);
 
 function ReplaceNoCase(const s,AFind,AReplace:string):string;
 begin
@@ -85,8 +90,6 @@ begin
 end;
 
 function TSqlGenerator.CompileSql(AString: string): string;
-
-
 var
   LoggingStack: TStringList;
   StackLevel:integer;
@@ -102,30 +105,36 @@ var
     procedure LoadDefaultParams;
     var
       i:integer;
+      ParamName: String;
+      HasParam: Boolean;
     begin
-      i := 1;
-      while pos('%'+IntToStr(i),aresult) > 0 do
-      begin
-        AParamNames.Add('%'+IntToStr(i));
-        Inc(i);
-      end;
+      i := 0;
+      repeat
+        inc(i);
+        ParamName := Format('%%d',[i]);
+        HasParam := pos(ParamName,aresult) > 0;
+        if HasParam then
+        begin
+          AParamNames.Add(ParamName);
+        end;
+      until (not HasParam);
     end;
 
     procedure LoadParamList;
     var
-      i:integer;
+      iBreakPos:integer;
       s:string;
     begin
       AResult := Trim(AResult);
-      i := Pos(sLineBreak,AResult);
-      if i = -1 then
+      iBreakPos := Pos(sLineBreak,AResult);
+      if (iBreakPos < 0) then
         LoadDefaultParams else
-      if Pos('MACRO ',uppercase(AResult))=1 then
+      if Pos(MACRO_KEYWORD,uppercase(AResult))=1 then
       begin
-        s := Copy(AResult,6,i-6);
-        Delete(AResult,1,i+1);
+        s := Copy(AResult,MACRO_LENGTH + 1,iBreakPos-MACRO_LENGTH);
+        Delete(AResult,1,iBreakPos + BREAK_LENGTH - 1);
         AParamNames.CommaText := s;
-        AParamNames.Delete(0); // Macro Name
+        AParamNames.Delete(0); // remove Macro Name
       end else
         LoadDefaultParams;
 
@@ -138,7 +147,7 @@ var
 
     function ListParam:boolean;
     begin
-      result := pos('%list',lowercase(AResult)) > 0;
+      result := pos(LIST_SYNTAX,lowercase(AResult)) > 0;
     end;
 
     procedure ParamSplit;
@@ -239,13 +248,13 @@ var
     try
       ParamSplit;
       if (CSV.Count <> ExpectParams) and (not ListParam) then
-        raise Exception.Create(Macro.SQLName + '( '+Value+') incorrect params');
+        raise Exception.CreateFmt('%s (%s) incorrect params',[Macro.SQLName,Value]);
 
 
       with TStackReplace.Create(nil) do
       try
-        if Pos('%LIST',uppercase(AResult)) > 0 then
-          AddParam('%List',ExpandString(Value));
+        if Pos(LIST_SYNTAX,uppercase(AResult)) > 0 then
+          AddParam(LIST_SYNTAX,ExpandString(Value));
         for i := 0 to AParamNames.Count-1  do
         begin
           AParam := AParamNames[i];
@@ -271,7 +280,7 @@ var
   function GetIncludeContent(aString: string): string;
   var
     List : TStrings;
-    BreakLength, LastPos: Integer;
+    LastPos: Integer;
   begin
     Result := '';
     if (aString <> '') then
@@ -282,10 +291,9 @@ var
         List.Delete(0);
         Result := List.Text;
 
-        BreakLength := Length(sLineBreak);
-        LastPos := Length(Result)-BreakLength + 1;
-        if Copy(Result, LastPos,BreakLength)=sLineBreak then
-          System.Delete(Result,LastPos,BreakLength);
+        LastPos := Length(Result)-BREAK_LENGTH + 1;
+        if Copy(Result, LastPos,BREAK_LENGTH)=sLineBreak then
+          Delete(Result,LastPos,BREAK_LENGTH);
       finally
         List.Free;
       end;
@@ -428,7 +436,7 @@ var
       localMacroStart = 'localmacro';
       localMacroEnd = 'endmacro';
     var
-      s:string;
+      s, BracketText:string;
       iPos:integer;
       iMacroOpeningBracket,iMacroClosingBracket:integer;
       Macro:THsTextData;
@@ -452,7 +460,7 @@ var
             SQL.next;
             while trim(SQL.GetToken) = '' do SQL.Next;
             Macro.SQLName := SQL.GetToken;
-            Macro.SQL := 'MACRO '+ Macro.SQLName;
+            Macro.SQL := Format('%s %s',[MACRO_KEYWORD,Macro.SQLName]);
 
             CodeStack := THsTextDataCodeStack.Create;
             Stack.Push(CodeStack);
@@ -468,17 +476,15 @@ var
 
             if sametext(s,localMacroEnd) then
             begin
-
-              begin
-                iMacroClosingBracket := SQL.GetTokenPos;
-                CodeStack.DeleteSize := iMacroClosingBracket - CodeStack.InsertPos + 9;
-                Inc(iMacroOpeningBracket);
-                Dec(iMacroClosingBracket);
-                Macro.sql := 'MACRO '+Macro.SQLName+' '+ Copy(result,iMacroOpeningBracket,iMacroClosingBracket-iMacroOpeningBracket+1);
-                CodeStack.Data := '';
-              end;
-
-            end else
+              iMacroClosingBracket := SQL.GetTokenPos;
+              CodeStack.DeleteSize := iMacroClosingBracket - CodeStack.InsertPos + 9;
+              Inc(iMacroOpeningBracket);
+              Dec(iMacroClosingBracket);
+              BracketText := Copy(result,iMacroOpeningBracket,iMacroClosingBracket-iMacroOpeningBracket+1);
+              Macro.sql := Format('%s %s %s',[MACRO_KEYWORD,Macro.SQLName,BracketText]);
+              CodeStack.Data := '';
+            end
+            else
             begin
               raise Exception.Create('Unterminated localMacro:'+Macro.SqlName);
             end;
