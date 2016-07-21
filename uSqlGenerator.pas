@@ -41,8 +41,7 @@ type
   end;
 
 const
-  LIST_SYNTAX = '%LIST';
-  MACRO_KEYWORD = 'MACRO';
+  MACRO_KEYWORD = 'MACRO ';
   MACRO_LENGTH : Integer = Length(MACRO_KEYWORD);
   BREAK_LENGTH : Integer = Length(sLineBreak);
 
@@ -125,7 +124,7 @@ var
       iBreakPos:integer;
       s:string;
     begin
-      AResult := Trim(AResult);
+      AResult := TrimLeft(AResult);
       iBreakPos := Pos(sLineBreak,AResult);
       if (iBreakPos < 0) then
         LoadDefaultParams else
@@ -143,11 +142,6 @@ var
     function ExpectParams:integer;
     begin
       result := AParamNames.Count;
-    end;
-
-    function ListParam:boolean;
-    begin
-      result := pos(LIST_SYNTAX,lowercase(AResult)) > 0;
     end;
 
     procedure ParamSplit;
@@ -247,14 +241,12 @@ var
     CSV := THssStringsCSV.Create;
     try
       ParamSplit;
-      if (CSV.Count <> ExpectParams) and (not ListParam) then
+      if (CSV.Count <> ExpectParams) then
         raise Exception.CreateFmt('%s (%s) incorrect params',[Macro.SQLName,Value]);
 
 
       with TStackReplace.Create(nil) do
       try
-        if Pos(LIST_SYNTAX,uppercase(AResult)) > 0 then
-          AddParam(LIST_SYNTAX,ExpandString(Value));
         for i := 0 to AParamNames.Count-1  do
         begin
           AParam := AParamNames[i];
@@ -435,6 +427,7 @@ var
     const
       localMacroStart = 'localmacro';
       localMacroEnd = 'endmacro';
+      END_LENGTH = Length(localMacroEnd);
     var
       s, BracketText:string;
       iPos:integer;
@@ -460,15 +453,17 @@ var
             SQL.next;
             while trim(SQL.GetToken) = '' do SQL.Next;
             Macro.SQLName := SQL.GetToken;
-            Macro.SQL := Format('%s %s',[MACRO_KEYWORD,Macro.SQLName]);
+            Macro.SQL := Format('%s%s',[MACRO_KEYWORD,Macro.SQLName]);
 
             CodeStack := THsTextDataCodeStack.Create;
             Stack.Push(CodeStack);
 
 
             CodeStack.Macro := Macro;
+            // first char of localmacro
             CodeStack.InsertPos := iPos;
-            iMacroOpeningBracket := SQL.GetTokenPos + Length(Macro.SQLName);
+            // first char after the macro name
+            iMacroOpeningBracket := SQL.GetTokenPos + 1 {0 Offset} + Length(Macro.SQLName);
             repeat
               SQL.Next;
               s := SQL.GetToken;
@@ -476,12 +471,13 @@ var
 
             if sametext(s,localMacroEnd) then
             begin
-              iMacroClosingBracket := SQL.GetTokenPos;
-              CodeStack.DeleteSize := iMacroClosingBracket - CodeStack.InsertPos + 9;
-              Inc(iMacroOpeningBracket);
-              Dec(iMacroClosingBracket);
+              iMacroClosingBracket := SQL.GetTokenPos; // 1 char before EndMacro
+
+
+              // all content from localmacro to end of endmacro
+              CodeStack.DeleteSize := (iMacroClosingBracket + END_LENGTH + BREAK_LENGTH) - CodeStack.InsertPos + 1;
               BracketText := Copy(result,iMacroOpeningBracket,iMacroClosingBracket-iMacroOpeningBracket+1);
-              Macro.sql := Format('%s %s %s',[MACRO_KEYWORD,Macro.SQLName,BracketText]);
+              Macro.sql := Format('%s%s %s',[MACRO_KEYWORD,Macro.SQLName,BracketText]);
               CodeStack.Data := '';
             end
             else
