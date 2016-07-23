@@ -1,26 +1,28 @@
 create procedure DetailedCursorTest as
 begin
-SET NOCOUNT ON
- 
-DECLARE @ID UniqueIdentifier, @Email VarChar(120)
+  SET NOCOUNT ON
 
+  DECLARE @ID UniqueIdentifier, @Email VarChar(120)
 
+  
 -- Create a local fast cursor called MyCursor
-DECLARE MyCursor CURSOR LOCAL FAST_FORWARD for
-  Select a.Id, c.Name From Account 
-    left join CollationProject c on (c.Id= Account.Id)
-     where name like 'K%'
+DECLARE MyCursor CURSOR LOCAL FAST_FORWARD for 
+
+  Select a.Id, a.Email From Account 
+       where name like 'K%'
 
 -- prepare to read  
 OPEN MyCursor
 
 -- fetch first row
-FETCH NEXT FROM MyCursor INTO @ID, @Email
+FETCH NEXT FROM MyCursor INTO
+ @ID, @Email
 WHILE @@FETCH_STATUS = 0
+
 BEGIN
 
   -- BEGIN Execute Row Code 
-  IF @Email <> 'kyley@harrissoftware.com'
+  IF @Email <> 'bobo@testsite.com'
    BEGIN
      insert into test (key, value) values (@ID, @Email)
    END ELSE
@@ -29,12 +31,14 @@ BEGIN
    END
   -- END Execute Row Code 
   
-  FETCH NEXT FROM MyCursor INTO @ID, @Email  
+  FETCH NEXT FROM MyCursor INTO
+ @ID, @Email  
 END
 
 -- Make Sure we close the cursor      
 CLOSE MyCursor
 -- Local cursor deallocate automatically.
 
-SET NOCOUNT OFF
+
+  SET NOCOUNT OFF
 end
