@@ -11,17 +11,10 @@ DECLARE MyCursor CURSOR LOCAL FAST_FORWARD for
   Select a.Id, a.Email From Account 
        where name like 'K%'
 
--- prepare to read  
 OPEN MyCursor
-
--- fetch first row
-FETCH NEXT FROM MyCursor INTO
- @ID, @Email
+FETCH NEXT FROM MyCursor INTO @ID, @Email
 WHILE @@FETCH_STATUS = 0
-
 BEGIN
-
-  -- BEGIN Execute Row Code 
   IF @Email <> 'bobo@testsite.com'
    BEGIN
      insert into test (key, value) values (@ID, @Email)
@@ -29,15 +22,11 @@ BEGIN
    BEGIN
      insert into test (key, value) values (@ID, 'anonymous@Email.com')   
    END
-  -- END Execute Row Code 
-  
-  FETCH NEXT FROM MyCursor INTO
- @ID, @Email  
+  FETCH NEXT FROM MyCursor INTO @ID, @Email  
 END
-
--- Make Sure we close the cursor      
+      
 CLOSE MyCursor
--- Local cursor deallocate automatically.
+
 
 
   SET NOCOUNT OFF

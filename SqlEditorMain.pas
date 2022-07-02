@@ -30,7 +30,7 @@ uses
   uLogger,
 // synedit code
   SynCompletionProposal,
-  SynHighlighterSQL;
+  SynHighlighterSQL, System.ImageList, System.Actions;
 
 const
   Titles :Array[TTextDataType] of string = ('None', 'Procedures','Includes', 'Macros','Functions','Views','Triggers');
@@ -185,7 +185,7 @@ uses
   Math,
   ShellAPI,
 {$ENDIF}
-  IniFiles;
+  IniFiles, uCmdParams;
 
 {$IFDEF FPC}
   {$R *.lfm}
@@ -692,7 +692,10 @@ begin
 end;
 
 procedure TSqlEditorMainFrm.FormCreate(Sender: TObject);
+var
+  projectName: string;
 begin
+  projectName := SwitchValue('p');
   FTables := TStringList.Create;
 
   FProject := TSqlProject.Create;
@@ -733,8 +736,8 @@ begin
   FPreviewSql.Highlighter := FHighlighter;
   FPreviewSql.OnMouseWheel := SqlMouseWheel;
 
-  if ParamStr(1) <> '' then
-    ProjectFolder := ParamStr(1) else
+  if projectName <> '' then
+    ProjectFolder := projectName else
     ProjectFolder := ExtractFilePath(ParamStr(0))+'SampleProject';
 
 

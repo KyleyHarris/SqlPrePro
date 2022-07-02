@@ -6,3 +6,6 @@ lib
 Bin
 /SqlEditorMain.pas.orig
 *.bak
+/synedit
+/Win32
+/.vs

@@ -1,18 +1,21 @@
 program HsSqlEditor;
 
 uses
-{$IFDEF FPC}
+  {$IFDEF FPC}
   Interfaces,
-{$ENDIF}
+  {$ENDIF }
   Forms,
-  SqlEditorMain in 'SqlEditorMain.pas';
+  SqlEditorMain in 'SqlEditorMain.pas',
+  uCmdParams in 'uCmdParams.pas';
+  
 
 {$R *.res}
 
 begin
-  Application.Initialize;
-  Application.MainFormOnTaskbar := True;
-  Application.Title := 'Sql Pre Proccessor';
-  Application.CreateForm(TSqlEditorMainFrm, SqlEditorMainFrm);
-  Application.Run;
+    Application.Initialize;
+    Application.MainFormOnTaskbar := True;
+    Application.Title := 'Sql Pre Proccessor';
+    Application.CreateForm(TSqlEditorMainFrm, SqlEditorMainFrm);
+    Application.Run;
+
 end.

@@ -23,9 +23,6 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
     Top = 31
     Height = 496
     Align = alRight
-    ExplicitLeft = 736
-    ExplicitTop = 24
-    ExplicitHeight = 527
   end
   object PageControl1: TPageControl
     Left = 0
@@ -38,10 +35,6 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
     OnChange = PageControl1Change
     object tsSql: TTabSheet
       Caption = 'SQL'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Splitter2: TSplitter
         Left = 0
         Top = 342
@@ -49,8 +42,6 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
         Height = 3
         Cursor = crVSplit
         Align = alBottom
-        ExplicitTop = 0
-        ExplicitWidth = 376
       end
       object PreviewPanel: TPanel
         Left = 0
@@ -82,18 +73,10 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
     object tsCompiled: TTabSheet
       Caption = 'Compiled Sql'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object tsMessage: TTabSheet
       Caption = 'Messages'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Memo1: TMemo
         Left = 0
         Top = 0
@@ -131,10 +114,6 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
       object tabDataAll: TTabSheet
         Caption = 'All Items'
         ImageIndex = 5
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object ViewAllItems: TTreeView
           Left = 0
           Top = 0
@@ -164,10 +143,6 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
       object tabDataRelated: TTabSheet
         Caption = 'Related'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object ViewRelatedItems: TTreeView
           Left = 0
           Top = 38
@@ -295,7 +270,7 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
     Left = 360
     Top = 112
     Bitmap = {
-      494C010103000500040010001000FFFFFFFFFF00FFFFFFFFFFFFFFFF424D3600
+      494C010103000500040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -431,7 +406,8 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
       C3FFC78FF0030000C3FFC30FF0030000C3FFC00F0003000083FFC00F00030000
       83FFC01F00030000807FC00F000F000080078007000F000080070003000F0000
       80070003000F000080070003000F00008007F03F000F00008007F87F000F0000
-      8007F87F000F00008007FCFF000F0000}
+      8007F87F000F00008007FCFF000F000000000000000000000000000000000000
+      000000000000}
   end
   object Timer1: TTimer
     Interval = 250
