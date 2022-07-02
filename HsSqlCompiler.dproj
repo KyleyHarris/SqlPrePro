@@ -1,17 +1,14 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{5f5d302c-cf82-4b5a-be51-e9c12c5c5906}</ProjectGuid>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
-        <DCC_DependencyCheckOutputName>Bin\HsSqlEditor.exe</DCC_DependencyCheckOutputName>
-        <MainSource>HsSqlEditor.dpr</MainSource>
-        <FrameworkType>VCL</FrameworkType>
+        <ProjectGuid>{7B363956-3C09-499C-9AA9-9C0495FDBAE0}</ProjectGuid>
         <ProjectVersion>18.8</ProjectVersion>
+        <FrameworkType>VCL</FrameworkType>
+        <MainSource>HsSqlCompiler.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1</TargetedPlatforms>
-        <AppType>Application</AppType>
+        <AppType>Console</AppType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
@@ -26,7 +23,7 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
         <Cfg_1>true</Cfg_1>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
@@ -37,144 +34,115 @@
         <Cfg_1>true</Cfg_1>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
         <Cfg_2>true</Cfg_2>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
-        <Cfg_2_Win32>true</Cfg_2_Win32>
-        <CfgParent>Cfg_2</CfgParent>
-        <Cfg_2>true</Cfg_2>
-        <Base>true</Base>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <SanitizedProjectName>HsSqlEditor</SanitizedProjectName>
-        <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
-        <VerInfo_Locale>5129</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
+        <DCC_ExeOutput>.\$(Platform)\$(Config)</DCC_ExeOutput>
+        <DCC_E>false</DCC_E>
+        <DCC_N>false</DCC_N>
+        <DCC_S>false</DCC_S>
+        <DCC_F>false</DCC_F>
+        <DCC_K>false</DCC_K>
+        <DCC_Namespace>VCL;System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
+        <SanitizedProjectName>HsSqlCompiler</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <DCC_UsePackage>DBXSqliteDriver;RESTComponents;dxCoreRS25;cxSchedulerTreeBrowserRS25;DBXInterBaseDriver;dxPSPrVwRibbonRS25;StyleControls_dxe103Rio;vclactnband;vclFireDAC;cxExportRS25;dxPSTeeChartRS25;tethering;svnui;dxPScxCommonRS25;FireDACADSDriver;cxPivotGridOLAPRS25;dxPSdxFCLnkRS25;cxSchedulerGridRS25;vcltouch;vcldb;bindcompfmx;svn;inetdb;cxLibraryRS25;FmxTeeUI;FireDACIBDriver;fmx;fmxdae;dxSkinscxSchedulerPainterRS25;dxPScxPivotGridLnkRS25;dxTabbedMDIRS25;dxBarDBNavRS25;dbexpress;IndyCore;dxFlowChartRS25;dxSkinsdxDLPainterRS25;vclx;dsnap;FireDACCommon;dxBarRS25;dxPSDBTeeChartRS25;dxTileControlRS25;dxdborRS25;RESTBackendComponents;dxDockingRS25;VCLRESTComponents;dxPScxExtCommonRS25;soapserver;dxSkinsdxNavBarPainterRS25;cxPageControlRS25;cxPivotGridRS25;dxPSLnksRS25;dxWizardControlRS25;dxNavBarRS25;vclie;bindengine;DBXMySQLDriver;CloudService;FireDACMySQLDriver;FireDACCommonODBC;FireDACCommonDriver;cxTreeListRS25;inet;dxSkinsdxBarPainterRS25;bindcompdbx;IndyIPCommon;dxPSdxLCLnkRS25;vcl;IndyIPServer;dxPScxVGridLnkRS25;dxBarExtItemsRS25;IndySystem;dxSkinsCoreRS25;dxComnRS25;dxPSdxDBTVLnkRS25;dsnapcon;dxLayoutControlRS25;FireDACMSAccDriver;fmxFireDAC;vclSvComV8D26;vclimg;TeeDB;FireDAC;dxPScxTLLnkRS25;dxdbtrRS25;dcldxSkinsCoreRS25;dxServerModeRS25;FireDACSqliteDriver;FireDACPgDriver;cxEditorsRS25;dxPScxSchedulerLnkRS25;FMXTee;cxGridRS25;soaprtl;DbxCommonDriver;dxorgcRS25;Tee;xmlrtl;soapmidas;dxPsPrVwAdvRS25;fmxobj;vclwinx;dxPScxGridLnkRS25;rtl;cxDataRS25;DbxClientDriver;cxTreeListdxBarPopupMenuRS25;dxPSCoreRS25;CustomIPTransport;vcldsnap;dxmdsRS25;dxPSdxOCLnkRS25;bindcomp;appanalytics;cxPivotGridChartRS25;IndyIPClient;cxSchedulerRS25;dxBarExtDBItemsRS25;bindcompvcl;dxSkinscxPCPainterRS25;dxGDIPlusRS25;dxThemeRS25;TeeUI;dxSkinsdxRibbonPainterRS25;dbxcds;VclSmp;adortl;dxPSdxDBOCLnkRS25;dxRibbonRS25;dsnapxml;dxSpellCheckerRS25;dbrtl;inetdbxpress;IndyProtocols;cxVerticalGridRS25;dxtrmdRS25;fmxase;$(DCC_UsePackage)</DCC_UsePackage>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <BT_BuildType>Debug</BT_BuildType>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <Icon_MainIcon>HsSqlEditor_Icon.ico</Icon_MainIcon>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <Icon_MainIcon>HsSqlEditor_Icon.ico</Icon_MainIcon>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <DCC_UsePackage>DBXSqliteDriver;RESTComponents;cxSchedulerTreeBrowserRS25;DBXInterBaseDriver;dxPSPrVwRibbonRS25;StyleControls_dxe103Rio;vclactnband;vclFireDAC;cxExportRS25;dxPSTeeChartRS25;tethering;dxPScxCommonRS25;FireDACADSDriver;cxPivotGridOLAPRS25;dxPSdxFCLnkRS25;cxSchedulerGridRS25;vcltouch;vcldb;bindcompfmx;inetdb;FmxTeeUI;FireDACIBDriver;fmx;fmxdae;dxSkinscxSchedulerPainterRS25;dxPScxPivotGridLnkRS25;dxTabbedMDIRS25;dxBarDBNavRS25;dbexpress;IndyCore;dxFlowChartRS25;dxSkinsdxDLPainterRS25;vclx;dsnap;FireDACCommon;dxBarRS25;dxPSDBTeeChartRS25;dxTileControlRS25;dxdborRS25;RESTBackendComponents;dxDockingRS25;VCLRESTComponents;dxPScxExtCommonRS25;soapserver;dxSkinsdxNavBarPainterRS25;cxPageControlRS25;cxPivotGridRS25;dxPSLnksRS25;dxWizardControlRS25;dxNavBarRS25;vclie;bindengine;DBXMySQLDriver;CloudService;FireDACMySQLDriver;FireDACCommonODBC;FireDACCommonDriver;cxTreeListRS25;inet;dxSkinsdxBarPainterRS25;bindcompdbx;IndyIPCommon;dxPSdxLCLnkRS25;vcl;IndyIPServer;dxPScxVGridLnkRS25;dxBarExtItemsRS25;IndySystem;dxSkinsCoreRS25;dxPSdxDBTVLnkRS25;dsnapcon;dxLayoutControlRS25;FireDACMSAccDriver;fmxFireDAC;vclimg;TeeDB;FireDAC;dxPScxTLLnkRS25;dxdbtrRS25;dcldxSkinsCoreRS25;FireDACSqliteDriver;FireDACPgDriver;dxPScxSchedulerLnkRS25;FMXTee;cxGridRS25;soaprtl;DbxCommonDriver;dxorgcRS25;Tee;xmlrtl;soapmidas;dxPsPrVwAdvRS25;fmxobj;vclwinx;dxPScxGridLnkRS25;rtl;DbxClientDriver;cxTreeListdxBarPopupMenuRS25;dxPSCoreRS25;CustomIPTransport;vcldsnap;dxmdsRS25;dxPSdxOCLnkRS25;bindcomp;appanalytics;cxPivotGridChartRS25;IndyIPClient;cxSchedulerRS25;dxBarExtDBItemsRS25;bindcompvcl;dxSkinscxPCPainterRS25;dxThemeRS25;TeeUI;dxSkinsdxRibbonPainterRS25;dbxcds;VclSmp;adortl;dxPSdxDBOCLnkRS25;dxRibbonRS25;dsnapxml;dxSpellCheckerRS25;dbrtl;inetdbxpress;IndyProtocols;cxVerticalGridRS25;dxtrmdRS25;fmxase;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
-        <Version>7.0</Version>
-        <DCC_DebugInformation>0</DCC_DebugInformation>
-        <DCC_WriteableConstants>True</DCC_WriteableConstants>
-        <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
-        <DCC_Optimize>False</DCC_Optimize>
-        <DCC_GenerateStackFrames>True</DCC_GenerateStackFrames>
-        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
-        <DCC_ExeOutput>.\bin</DCC_ExeOutput>
-        <DCC_DcuOutput>.\dcu</DCC_DcuOutput>
-        <DCC_ObjOutput>.\dcu</DCC_ObjOutput>
-        <DCC_HppOutput>.\dcu</DCC_HppOutput>
-        <DCC_Define>RELEASE;CODECOMPLETE;$(DCC_Define)</DCC_Define>
-        <DCC_UnitSearchPath>.\SearchAndReplace;.\Hss;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <DCC_ResourcePath>.\SearchAndReplace;.\Hss;$(DCC_ResourcePath)</DCC_ResourcePath>
-        <DCC_ObjPath>.\SearchAndReplace;.\Hss;$(DCC_ObjPath)</DCC_ObjPath>
-        <DCC_IncludePath>.\SearchAndReplace;.\Hss;$(DCC_IncludePath)</DCC_IncludePath>
+        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+        <DCC_DebugDCUs>true</DCC_DebugDCUs>
+        <DCC_Optimize>false</DCC_Optimize>
+        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+        <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+        <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <DCC_RemoteDebug>false</DCC_RemoteDebug>
+        <DCC_UnitSearchPath>K:\delphi\SqlPrePro-development\synedit\Source;K:\delphi\SqlPrePro-development\synedit\Source\Highlighters;K:\delphi\SqlPrePro-development\Hss;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <Manifest_File>(None)</Manifest_File>
+        <DCC_ExeOutput>.\bin</DCC_ExeOutput>
+        <Debugger_RunParams>/p:.\sampleproject</Debugger_RunParams>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
-        <Version>7.0</Version>
-        <DCC_WriteableConstants>True</DCC_WriteableConstants>
-        <DCC_Optimize>False</DCC_Optimize>
-        <DCC_GenerateStackFrames>True</DCC_GenerateStackFrames>
-        <DCC_ExeOutput>.\Bin</DCC_ExeOutput>
-        <DCC_DcuOutput>.\dcu</DCC_DcuOutput>
-        <DCC_ObjOutput>.\dcu</DCC_ObjOutput>
-        <DCC_HppOutput>.\dcu</DCC_HppOutput>
-        <DCC_Define>DEBUG;DEBUG;CODECOMPLETE;$(DCC_Define)</DCC_Define>
-        <DCC_UnitSearchPath>$(BDS)\lib\Debug;.\SearchAndReplace;.\Hss;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <DCC_ResourcePath>$(BDS)\lib\Debug;.\SearchAndReplace;.\Hss;$(DCC_ResourcePath)</DCC_ResourcePath>
-        <DCC_ObjPath>$(BDS)\lib\Debug;.\SearchAndReplace;.\Hss;$(DCC_ObjPath)</DCC_ObjPath>
-        <DCC_IncludePath>$(BDS)\lib\Debug;.\SearchAndReplace;.\Hss;$(DCC_IncludePath)</DCC_IncludePath>
-        <DCC_IntegerOverflowCheck>True</DCC_IntegerOverflowCheck>
-        <DCC_RangeChecking>True</DCC_RangeChecking>
-        <DCC_MapFile>3</DCC_MapFile>
+        <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+        <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
-        <DCC_UnitSearchPath>K:\delphi\SqlPrePro-development\synedit\Source;K:\delphi\SqlPrePro-development\synedit\Source\Highlighters;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
-        <Debugger_RunParams>/c /p:.\SampleProject</Debugger_RunParams>
-    </PropertyGroup>
+    <ItemGroup>
+        <DelphiCompile Include="$(MainSource)">
+            <MainSource>MainSource</MainSource>
+        </DelphiCompile>
+        <DCCReference Include="uCmdCompiler.pas"/>
+        <DCCReference Include="uCmdParams.pas"/>
+        <DCCReference Include="uFileUtils.pas"/>
+        <DCCReference Include="uLogger.pas"/>
+        <DCCReference Include="uSqlGenerator.pas"/>
+        <DCCReference Include="uSqlProject.pas"/>
+        <DCCReference Include="uTextData.pas"/>
+        <BuildConfiguration Include="Release">
+            <Key>Cfg_2</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Base">
+            <Key>Base</Key>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+    </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Delphi.Personality.12</Borland.Personality>
-        <Borland.ProjectType/>
+        <Borland.ProjectType>Application</Borland.ProjectType>
         <BorlandProject>
             <Delphi.Personality>
-                <Parameters>
-                    <Parameters Name="UseLauncher">False</Parameters>
-                    <Parameters Name="LoadAllSymbols">True</Parameters>
-                    <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
-                </Parameters>
-                <VersionInfo>
-                    <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
-                    <VersionInfo Name="AutoIncBuild">False</VersionInfo>
-                    <VersionInfo Name="MajorVer">1</VersionInfo>
-                    <VersionInfo Name="MinorVer">0</VersionInfo>
-                    <VersionInfo Name="Release">0</VersionInfo>
-                    <VersionInfo Name="Build">0</VersionInfo>
-                    <VersionInfo Name="Debug">False</VersionInfo>
-                    <VersionInfo Name="PreRelease">False</VersionInfo>
-                    <VersionInfo Name="Special">False</VersionInfo>
-                    <VersionInfo Name="Private">False</VersionInfo>
-                    <VersionInfo Name="DLL">False</VersionInfo>
-                    <VersionInfo Name="Locale">5129</VersionInfo>
-                    <VersionInfo Name="CodePage">1252</VersionInfo>
-                </VersionInfo>
-                <VersionInfoKeys>
-                    <VersionInfoKeys Name="CompanyName"/>
-                    <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
-                    <VersionInfoKeys Name="InternalName"/>
-                    <VersionInfoKeys Name="LegalCopyright"/>
-                    <VersionInfoKeys Name="LegalTrademarks"/>
-                    <VersionInfoKeys Name="OriginalFilename"/>
-                    <VersionInfoKeys Name="ProductName"/>
-                    <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
-                    <VersionInfoKeys Name="Comments"/>
-                </VersionInfoKeys>
+                <Source>
+                    <Source Name="MainSource">HsSqlCompiler.dpr</Source>
+                </Source>
                 <Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k260.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp260.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
-                <Source>
-                    <Source Name="MainSource">HsSqlEditor.dpr</Source>
-                </Source>
             </Delphi.Personality>
-            <Platforms>
-                <Platform value="Win32">True</Platform>
-                <Platform value="Win64">False</Platform>
-            </Platforms>
             <Deployment Version="3">
-                <DeployFile LocalName="Bin\HsSqlEditor.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
+                    <Platform Name="OSX32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="$(BDS)\Redist\iossimulator\libcgunwind.1.0.dylib" Class="DependencyModule">
+                    <Platform Name="iOSSimulator">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="$(BDS)\Redist\iossimulator\libpcre.dylib" Class="DependencyModule">
+                    <Platform Name="iOSSimulator">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win32\Debug\HsSqlCompiler.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>HsSqlEditor.exe</RemoteName>
+                        <RemoteName>HsSqlCompiler.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -1005,29 +973,13 @@
                 <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Android64" Name="$(PROJECTNAME)"/>
             </Deployment>
+            <Platforms>
+                <Platform value="Win32">True</Platform>
+                <Platform value="Win64">False</Platform>
+            </Platforms>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>
-    <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
-    <ItemGroup>
-        <DelphiCompile Include="$(MainSource)">
-            <MainSource>MainSource</MainSource>
-        </DelphiCompile>
-        <DCCReference Include="SqlEditorMain.pas"/>
-        <DCCReference Include="uCmdParams.pas"/>
-        <DCCReference Include="uCmdCompiler.pas"/>
-        <BuildConfiguration Include="Debug">
-            <Key>Cfg_2</Key>
-            <CfgParent>Base</CfgParent>
-        </BuildConfiguration>
-        <BuildConfiguration Include="Base">
-            <Key>Base</Key>
-        </BuildConfiguration>
-        <BuildConfiguration Include="Release">
-            <Key>Cfg_1</Key>
-            <CfgParent>Base</CfgParent>
-        </BuildConfiguration>
-    </ItemGroup>
     <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
     <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
     <Import Project="$(MSBuildProjectName).deployproj" Condition="Exists('$(MSBuildProjectName).deployproj')"/>

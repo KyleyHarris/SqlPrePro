@@ -1,11 +1,11 @@
 _LoopCursor
 MACRO _LoopCursor @cursor, @params, @code
-OPEN Speed
-FETCH NEXT FROM Speed INTO @params
+OPEN @cursor
+FETCH NEXT FROM @cursor INTO @params
 WHILE @@FETCH_STATUS = 0
 BEGIN
   @code
-  FETCH NEXT FROM Speed INTO @params  
+  FETCH NEXT FROM @cursor INTO @params  
 END
       
-CLOSE Speed
+CLOSE @cursor
