@@ -185,7 +185,7 @@ uses
   Math,
   ShellAPI,
 {$ENDIF}
-  IniFiles, uCmdParams;
+  IniFiles, uCmdParams, SynEdit;
 
 {$IFDEF FPC}
   {$R *.lfm}
@@ -719,6 +719,28 @@ begin
   FSql.OnMouseWheel := SqlMouseWheel;
   FSql.OnJumpToDeclaration := DoDeclaration;
   FSql.Highlighter := FHighlighter;
+  FSql.WantTabs := true;
+  FSql.TabWidth := 4;
+  FSQL.Options := FSQL.Options + [
+    eoAutoIndent,              //Will indent the caret on new lines with the same amount of leading white space as the preceding line
+    eoDisableScrollArrows,     //Disables the scroll bar arrow buttons when you can't scroll in that direction any more
+    eoEnhanceHomeKey,          //enhances home key positioning, similar to visual studio
+    eoEnhanceEndKey,           //enhances End key positioning, similar to JDeveloper
+    eoGroupUndo,               //When undoing/redoing actions, handle all continous changes of the same kind in one call instead undoing/redoing each command separately
+    eoHalfPageScroll,          //When scrolling with page-up and page-down commands, only scroll a half page at a time
+    eoHideShowScrollbars,      //if enabled, then the scrollbars will only show when necessary.  If you have ScrollPastEOL, then it the horizontal bar will always be there (it uses MaxLength instead)
+    eoKeepCaretX,              //When moving through lines w/o Cursor Past EOL, keeps the X position of the cursor
+    eoRightMouseMovesCursor,   //When clicking with the right mouse for a popup menu, move the cursor to that location
+    eoScrollPastEol,           //Allows the cursor to go past the last character into the white space at the end of a line
+    eoShowScrollHint,          //Shows a hint of the visible line numbers when scrolling vertically
+    eoSmartTabDelete,          //similar to Smart Tabs, but when you delete characters
+    eoSmartTabs,               //When tabbing, the cursor will go to the next non-white space character of the previous line
+    eoTabIndent,               //When active <Tab> and <Shift><Tab> act as block indent, unindent when text is selected
+    eoTabsToSpaces,            //Converts a tab character to a specified number of space characters
+    eoTrimTrailingSpaces,      //Spaces at the end of lines will be trimmed and not saved
+    eoCopyPlainText           //Do not include additional clipboard formats when you copy to Clipboard or drag text
+  ];
+
 
   EnableCodeComplete;
 

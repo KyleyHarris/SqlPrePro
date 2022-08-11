@@ -35,6 +35,7 @@ implementation
 type
   THsTextDataCodeStack = class(TObject)
     InsertPos:integer;
+    Padding: integer;
     DeleteSize:integer;
     Data:string;
     Macro:THsTextData;
@@ -308,7 +309,12 @@ var
       iMacroOpeningBracket,iMacroClosingBracket:integer;
       NestBracket:integer;
       Kind:TtkTokenKind;
+      iStartOfLine: integer;
+      spaceLen:integer;
+      iText: integer;
+      sl: TStringList;
     begin
+      spaceLen := 0;
       if SameText('_empty',Value ) then
       begin
         result := '';
@@ -325,6 +331,8 @@ var
         Kind := TTkTokenKind(SQL.GetTokenKind);
         lasttoken := trim(s);
         s := lowercase(SQL.GetToken);
+        if (s = #13) or (s= #13#10) then
+            iStartOfLine := SQL.GetTokenPos + Length(s);
         if Kind = tkIdentifier then
         begin
           iPos := SQL.GetTokenPos+1;
@@ -346,6 +354,7 @@ var
               CodeStack.Macro := FMacros.Objects[FMacros.IndexOf(data)] as THsTextData;
               // first character of the macro that we need to delete from
               CodeStack.InsertPos := iPos;
+              CodeStack.Padding := iPos - iStartOfLine;
 
               NestBracket := 0;
               // Record the starting point of the macro parameter stack.
@@ -379,7 +388,21 @@ var
                               );
 
                 LoggingStack.Add(Format('%s(%s)',[CodeStack.Macro.SQLName, Data]));
-                CodeStack.Data := ExpandMacro(CodeStack.Macro,data,StackLevel);
+                sl := TStringList.Create;
+                try
+                  CodeStack.Data := ExpandMacro(CodeStack.Macro,data,StackLevel);
+                  sl.text := CodeStack.Data;
+                  if CodeStack.Padding > 0 then
+                    for iText := 1 to sl.Count - 1 do
+                      sl[iText] := StringOfChar(' ',CodeStack.Padding) + sl[iText];
+                  if sl[sl.count-1] = '' then
+                    sl.delete(sl.count-1);
+                  CodeStack.Data := TrimRight(sl.Text);
+                finally
+                  sl.free;
+                end;
+
+
                 LoggingStack.Delete(LoggingStack.Count-1);
 
               end;
@@ -390,6 +413,8 @@ var
         end else
         begin
           s := SQL.GetToken;
+          if (s = #13) or (s= #13#10) then
+            iStartOfLine := SQL.GetTokenPos + Length(s);
           if s[1] = IncludeTag then
           begin
             // Break down the include tag to replace the content.
