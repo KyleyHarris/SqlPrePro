@@ -310,11 +310,11 @@ var
       NestBracket:integer;
       Kind:TtkTokenKind;
       iStartOfLine: integer;
-      spaceLen:integer;
+
       iText: integer;
       sl: TStringList;
     begin
-      spaceLen := 0;
+      iStartOfLine := 0;
       if SameText('_empty',Value ) then
       begin
         result := '';
