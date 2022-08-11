@@ -29,7 +29,7 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
     Top = 31
     Width = 591
     Height = 496
-    ActivePage = tsMessage
+    ActivePage = tsSql
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change
@@ -91,6 +91,8 @@ object SqlEditorMainFrm: TSqlEditorMainFrm
         ParentFont = False
         ScrollBars = ssVertical
         TabOrder = 0
+        WantTabs = True
+        WordWrap = False
       end
     end
   end
