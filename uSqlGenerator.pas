@@ -331,7 +331,7 @@ var
         Kind := TTkTokenKind(SQL.GetTokenKind);
         lasttoken := trim(s);
         s := lowercase(SQL.GetToken);
-        if (s = #13) or (s= #13#10) then
+        if (s = sLineBreak) then
             iStartOfLine := SQL.GetTokenPos + Length(s);
         if Kind = tkIdentifier then
         begin
@@ -413,7 +413,7 @@ var
         end else
         begin
           s := SQL.GetToken;
-          if (s = #13) or (s= #13#10) then
+          if (s = sLineBreak) then
             iStartOfLine := SQL.GetTokenPos + Length(s);
           if s[1] = IncludeTag then
           begin
